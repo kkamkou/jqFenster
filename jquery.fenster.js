@@ -1,15 +1,11 @@
 /**
- * Yangutu
+ * Licensed under the MIT License
+ * Redistributions of files must retain the copyright notice below.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are PROHIBITED without prior written permission from
- * the author. If you received this code occasionally and without
- * intent to use it, please report this incident to the author.
- *
- * @category JavaScript
- * @package  General
+ * @category ThirdParty
  * @author   Kanstantsin A Kamkou (2ka.by)
- * @license  http://yangutu.com/dating/terms
+ * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @link     https://github.com/kkamkou/jqFenster
  */
 
 /**
