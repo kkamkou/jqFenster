@@ -1,0 +1,3 @@
+[submodule "jqEbony"]
+	path = jqEbony
+	url = git@github.com:kkamkou/jqEbony.git
