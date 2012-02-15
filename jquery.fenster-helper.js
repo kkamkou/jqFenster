@@ -197,7 +197,7 @@
                     'callbackOpen': function () {
                         $holder.trigger('jqFensterCallbackOpen');
                     }
-                });
+                }).open();
             } else {
                 $holder.fadeIn(options.animationSpeed, function () {
                     $holder.trigger('jqFensterCallbackOpen');
@@ -232,7 +232,8 @@
         // close function for the popup
         function jqFensterClose() {
             // removing current window
-            $holder.children().fadeOut(options.animationSpeed, function () {
+            $holder.children()
+                .fadeOut(options.animationSpeed, function () {
                     // working with the overlay
                     if (overlay) {
                         overlay.close();
