@@ -29,7 +29,7 @@
 (function ($) {
     "use strict";
 
-    //
+    // the main object
     var jqFenster = function ($elem, options) {
         this.holder = $elem.data('jqFensterHolder');
         this.element = $elem;
@@ -119,10 +119,17 @@
     $.extend({
         // working inside opened window
         fensterFinder: function (target) {
+            // target is link already
+            if ($(target).data('jqFensterHolder')) {
+                return $(target).fenster(target.data('options'));
+            }
+
+            // trying to find the link holder
             var $elem = $(target).parents('.jqFensterHolder');
             if ($elem.length) {
                 return $($elem.data('jqFensterAncestor')).fenster();
             }
+
             return null;
         },
 

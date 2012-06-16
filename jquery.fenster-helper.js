@@ -20,6 +20,8 @@
  *  callbackClose   none   Called after a window was closed
  *
  * @example:
+ *  jQuery.jqFensterOptions.animationSpeed = 0; // global
+ *
  *  (a href="/hello/world/"|input|...) class="jqFenster"
  *      data-href="/hello/world"
  *      data-selector="#myDiv"
@@ -32,17 +34,21 @@
 (function (doc, win, $) {
     "use strict";
 
+    // default set of options
+    $.jqFensterOptions = {
+        'noOverlay': false,
+        'unfixed': false,
+        'animationSpeed': 0, // in ms, for example: 200, 400 or 800
+        'callbackOpen': null,
+        'callbackClose': null
+    };
+
+    // DOM listener
     $('.jqFenster').live('click', function (event) {
         // defaults
         var overlay = null,
             $self = $(this),
-            options = {
-                'noOverlay': false,
-                'unfixed': false,
-                'animationSpeed': 0, // in ms, for example: 200, 400 or 800
-                'callbackOpen': null,
-                'callbackClose': null
-            },
+            options = $.jqFensterOptions,
             $holder = $('<div/>').css({
                 'display': 'none',
                 'position': 'fixed',
@@ -75,30 +81,34 @@
                 ]);
             }
 
-            // creating callback for the open event
+            // open event redeclaration
             if (options.callbackOpen) {
                 options.callbackOpen = win[options.callbackOpen];
-                if (typeof (options.callbackOpen) === 'function') {
-                    $holder.bind('jqFensterCallbackOpen', function () {
-                        return options.callbackOpen($self);
-                    });
-                }
             }
 
-            // creating callback for the close event
+            // close event redeclaration
             if (options.callbackClose) {
                 options.callbackClose = win[options.callbackClose];
-                if (typeof (options.callbackClose) === 'function') {
-                    $holder.bind('jqFensterCallbackClose', function () {
-                        return options.callbackClose($self);
-                    });
-                }
             }
 
             // should we use fixed position or not
             if (options.unfixed) {
                 $holder.css('position', 'absolute');
             }
+        }
+
+        // creating callback for the open event
+        if (typeof (options.callbackOpen) === 'function') {
+            $holder.bind('jqFensterCallbackOpen', function () {
+                return options.callbackOpen($self);
+            });
+        }
+
+        // creating callback for the close event
+        if (typeof (options.callbackClose) === 'function') {
+            $holder.bind('jqFensterCallbackClose', function () {
+                return options.callbackClose($self);
+            });
         }
 
         // move window to the center of a screen
