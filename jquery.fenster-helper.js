@@ -255,9 +255,9 @@
 
                     // DOM cleanup
                     if (!$element.data('selector')) {
-                        $holder.remove();
+                        $holder.parent().remove();
                     } else {
-                        $(this).unwrap();
+                        $(this).unwrap().unwrap();
                     }
 
                     // data and marker cleanup, unlocking the current object
