@@ -44,17 +44,18 @@
     };
 
     // main class
-    var JqFenster = function (options, element) {
+    var JqFenster = function (options, $element) {
         // defaults
         this.overlay = null;
-        this.options = options,
-        this.element = element;
+        this.options = options;
+        this.element = $element;
         this.holder = null;
 
         // constructor
         this._init = function () {
             var that = this;
 
+            // default holder styles
             this.holder = $('<div/>').css({
                 'display': 'none',
                 'position': 'fixed',
@@ -63,30 +64,33 @@
                 'top': 0
             });
 
+            // lets store some information
+            $.data(this.holder.get(0), 'jqFenster', this);
+
             // do we have JSON options?
             // For example: data-options='{a:0, b:true, c:"3"}'
-            if (element.data('options')) {
+            if ($element.data('options')) {
                 try {
                     // @see http://ecma262-5.com/ELS5_HTML.htm#Section_15.5.4.11
                     $.extend(
                         this.options,
-                        typeof (element.data('options')) === 'object' ? element.data('options')
-                            : $.parseJSON(element.data('options').replace(/([a-zA-Z]+):/g, '"$01":'))
+                        $.type($element.data('options')) === 'object' ? $element.data('options')
+                            : $.parseJSON($element.data('options').replace(/([a-zA-Z]+):/g, '"$01":'))
                     );
                 } catch (e) {
                     $.error([
                         'jqFenster: incorrect JSON provided (check the code of a link)',
-                        element.data('options'), e.toString()
+                        $element, e.toString()
                     ]);
                 }
 
                 // open event redeclaration
-                if (this.options.callbackOpen) {
+                if ($.type(this.options.callbackOpen) === 'string') {
                     this.options.callbackOpen = win[this.options.callbackOpen];
                 }
 
                 // close event redeclaration
-                if (this.options.callbackClose) {
+                if ($.type(this.options.callbackClose) === 'string') {
                     this.options.callbackClose = win[this.options.callbackClose];
                 }
 
@@ -109,7 +113,7 @@
                     return that.options.callbackClose(that.getElement());
                 });
             }
-        }
+        };
     };
 
     // extending
@@ -124,6 +128,7 @@
             return this.element;
         },
 
+        // returns the overlay object
         getOverlay: function () {
             return this.overlay;
         },
@@ -138,11 +143,9 @@
             // constructor
             this._init();
 
+
             // locking this element
             this.setLock(true);
-
-            // locking this link
-            this.getElement().data('jqFensterLocked', true);
 
             // DOM corrections
             $('body').append(this.getHolder());
@@ -156,37 +159,40 @@
 
             // preload content from the href
             $.get((this.getElement().data('href') || this.getElement().attr('href')))
-                .done(function (data) {
-                    return that.create(data);
-                });
+                .done(function (data) { that.create(data); });
 
             return this;
         },
 
         // move window to the center of a screen
         centerize: function ($elem) {
+            // defaults
+            var that = this, elemInfo = {}, elemMath = {};
+
             // cycling to get the element height
             if (!$elem.height()) {
-                var that = this;
                 setTimeout(function () { that.centerize($elem); }, 30);
                 return this;
             }
 
-            var elemInfo = {
-                    'width':         $elem.width(),
-                    'height':        $elem.height(),
-                    'positionType':  $elem.parent().css('position'),
-                    'paddingTop':    parseInt($elem.css('padding-top'), 10),
-                    'paddingBottom': parseInt($elem.css('padding-bottom'), 10),
-                    'borderTop':     parseInt($elem.css('border-top-width'), 10),
-                    'borderBottom':  parseInt($elem.css('border-bottom-width'), 10)
-                },
-                elemMath = {
-                    'mediaBorder': 0,
-                    'mediaPadding': 0,
-                    'halfWidth': 0,
-                    'halfHeight': 0
-                };
+            // element information
+            elemInfo = {
+                'width':         $elem.width(),
+                'height':        $elem.height(),
+                'positionType':  $elem.parent().css('position'),
+                'paddingTop':    parseInt($elem.css('padding-top'), 10),
+                'paddingBottom': parseInt($elem.css('padding-bottom'), 10),
+                'borderTop':     parseInt($elem.css('border-top-width'), 10),
+                'borderBottom':  parseInt($elem.css('border-bottom-width'), 10)
+            };
+
+            // calculations
+            elemMath = {
+                'mediaBorder': 0,
+                'mediaPadding': 0,
+                'halfWidth': 0,
+                'halfHeight': 0
+            };
 
             // get the media of padding and borders
             elemMath.mediaBorder = (elemInfo.borderTop + elemInfo.borderBottom) / 2;
@@ -241,91 +247,96 @@
 
         // content switch and show
         create: function (target) {
-            var that = this;
+            var that = this,
+                $element = this.getElement(),
+                $holder = this.getHolder();
 
             // DOM corrections
-            this.getHolder().empty().append(target);
+            $holder.empty().append(target);
 
             // making sure that the inner content is hidden
             // avoiding browser issues
-            this.getHolder().children().hide();
+            $holder.children().hide();
 
             // centerizing
-            this.centerize(this.getHolder().children());
+            this.centerize($holder.children());
+
+            // the close trigger
+            $holder.bind('jqFensterClose', function () {
+                // if the current plugin uses jqEbony, we should notice it
+                if ($.type(that.getOverlay()) === 'object') {
+                    that.getOverlay().close();
+                    that.setOverlay(null);
+                    return that;
+                }
+                return that.close();
+            });
+
+            // resize trigger
+            $holder.bind('jqFensterReposition', function () {
+                return that.centerize($holder.children());
+            });
+
+            // close buttons
+            $holder.find('.jqFensterClose').bind('click', function () {
+                $holder.trigger('jqFensterClose');
+                return false;
+            });
+
+            // linking holder with the ancestor
+            $holder.addClass('jqFensterHolder')
+                .data('jqFensterAncestor', $element);
+
+            // storing holder
+            $element.data('jqFensterHolder', $holder);
 
             // overlay with the popup or standalone popup
             if (!this.options.noOverlay && $.type($.fn.jqEbony) !== 'undefined') {
                 this.setOverlay(
-                    $(this.getHolder()).jqEbony({
+                    $($holder).jqEbony({
                         'animationSpeed': this.options.animationSpeed,
-                        'callbackClose': function () {
-                            that.getHolder().trigger('jqFensterClose');
+                        'callbackClose': function (instance) {
+                            return that.close.apply(
+                                $.data(instance.getElement().get(0), 'jqFenster')
+                            );
                         },
                         'callbackOpen': function () {
-                            that.getHolder().trigger('jqFensterCallbackOpen');
+                            $holder.trigger('jqFensterCallbackOpen');
                         }
                     }).open()
                 );
             } else {
-                this.getHolder().fadeIn(this.options.animationSpeed, function () {
-                    that.getHolder().trigger('jqFensterCallbackOpen');
+                $holder.fadeIn(this.options.animationSpeed, function () {
+                    $holder.trigger('jqFensterCallbackOpen');
                 });
             }
-
-            // the close trigger
-            this.getHolder().bind('jqFensterClose', function () {
-                return that.close();
-            });
-
-            // close buttons
-            this.getHolder().find('.jqFensterClose').bind('click', function () {
-                that.getHolder().trigger('jqFensterClose');
-                return false;
-            });
-
-            // resize trigger
-            this.getHolder().bind('jqFensterReposition', function () {
-                return that.centerize(this.getHolder().children());
-            });
-
-            // storing holder
-            this.getElement().data('jqFensterHolder', this.getHolder());
-
-            // linking holder with the ancestor
-            this.getHolder().addClass('jqFensterHolder')
-                .data('jqFensterAncestor', this.getElement());
 
             return false;
         },
 
+        // closes popup
         close: function () {
-            var that = this;
+            var $element = this.getElement(),
+                $holder = this.getHolder();
 
             // removing current window
-            this.getHolder().children()
-                .fadeOut(this.options.animationSpeed, function () {
+            $holder.children().fadeOut(
+                this.options.animationSpeed,
+                function () {
                     // calling default callback
-                    that.getHolder().trigger('jqFensterCallbackClose');
+                    $holder.trigger('jqFensterCallbackClose');
 
                     // DOM cleanup
-                    if (!that.getElement().data('selector')) {
-                        $(this).parent().remove();
+                    if (!$element.data('selector')) {
+                        $holder.remove();
                     } else {
                         $(this).unwrap();
                     }
 
                     // data and marker cleanup, unlocking the current object
-                    that.getElement()
-                        .data('jqFensterLocked', false)
-                        .removeData('jqFensterHolder');
-                });
-
-            // if the current plugin uses jqEbony, we should notice it
-            if ($.type(this.getOverlay()) === 'object') {
-                this.getOverlay().close();
-                this.setOverlay(null);
-                return this;
-            }
+                    $element.removeData(['jqFensterLocked', 'jqFensterHolder']);
+                }
+            );
 
             return this;
         },
@@ -349,6 +360,7 @@
 
     // DOM listener
     $('.jqFenster').live('click', function (event) {
-        return (new JqFenster($.jqFensterOptions, $(this))).open();
+        (new JqFenster($.jqFensterOptions, $(this))).open();
+        return false;
     });
 }(document, window, jQuery));
