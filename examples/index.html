@@ -24,15 +24,16 @@
                     };
 
                     jQuery.fenster('#target').open();
-                    
+
                     return false;
                 });
             });
         </script>
 
-        No JS code:
+        Examples:
             <a href="/some/thing" data-selector="#target" class="jqFenster">Simple link</a>
-            <a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">Simple link with option</a>
+            <a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation</a>
+            <a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay</a>
             <a href="/some/thing" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback</a>
             <a href="remote.html" class="jqFenster">Remote one</a>
             <button data-selector="#targetSecond" class="jqFenster">I'm button</button>

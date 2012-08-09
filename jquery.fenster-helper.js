@@ -9,13 +9,14 @@
  */
 
 /**
+ * v1.0
+ *
  * Depends:
  *  jquery.ebony.js (optional)
  *
  * Default options:
  *  animationSpeed  400    Sets animation speed for a window
  *  noOverlay       false  Disables ygOverlay usage
- *  unfixed         false  Removes static positioning for a window
  *  callbackOpen    none   Called after a window was created
  *  callbackClose   none   Called after a window was closed
  *
@@ -25,7 +26,7 @@
  *  (a href="/hello/world/"|input|...) class="jqFenster"
  *      data-href="/hello/world"
  *      data-selector="#myDiv"
- *      data-options='{animationSpeed: 200, noOverlay: true, unfixed: true, callbackOpen: "myOpen", callbackClose: "myClose"}'
+ *      data-options='{animationSpeed: 200, noOverlay: true, callbackOpen: "myOpen", callbackClose: "myClose"}'
  *
  * In a popup you can use the close helper
  *  (a|input|...) class="jqFensterClose"
@@ -37,8 +38,7 @@
     // default set of options
     $.jqFensterOptions = {
         'noOverlay': false,
-        'unfixed': false,
-        'animationSpeed': 0, // in ms, for example: 200, 400 or 800
+        'animationSpeed': 1, // in ms, for example: 200, 400 or 800
         'callbackOpen': null,
         'callbackClose': null
     };
@@ -56,13 +56,7 @@
             var that = this;
 
             // default holder styles
-            this.holder = $('<div/>').css({
-                'display': 'none',
-                'position': 'fixed',
-                '_position': 'absolute',
-                'left': 0,
-                'top': 0
-            });
+            this.holder = $('<div/>');
 
             // lets store some information
             $.data(this.holder.get(0), 'jqFenster', this);
@@ -92,11 +86,6 @@
                 // close event redeclaration
                 if ($.type(this.options.callbackClose) === 'string') {
                     this.options.callbackClose = win[this.options.callbackClose];
-                }
-
-                // should we use fixed position or not
-                if (this.options.unfixed) {
-                    this.element.css('position', 'absolute');
                 }
             }
 
@@ -143,7 +132,6 @@
             // constructor
             this._init();
 
-
             // locking this element
             this.setLock(true);
 
@@ -165,81 +153,20 @@
         },
 
         // move window to the center of a screen
-        centerize: function ($elem) {
-            // defaults
-            var that = this, elemInfo = {}, elemMath = {};
-
+        show: function ($elem) {
             // cycling to get the element height
             if (!$elem.height()) {
-                setTimeout(function () { that.centerize($elem); }, 30);
+                var that = this;
+                setTimeout(function () { that.show($elem); }, 30);
                 return this;
             }
 
-            // element information
-            elemInfo = {
-                'width':         $elem.width(),
-                'height':        $elem.height(),
-                'positionType':  $elem.parent().css('position'),
-                'paddingTop':    parseInt($elem.css('padding-top'), 10),
-                'paddingBottom': parseInt($elem.css('padding-bottom'), 10),
-                'borderTop':     parseInt($elem.css('border-top-width'), 10),
-                'borderBottom':  parseInt($elem.css('border-bottom-width'), 10)
-            };
-
-            // calculations
-            elemMath = {
-                'mediaBorder': 0,
-                'mediaPadding': 0,
-                'halfWidth': 0,
-                'halfHeight': 0
-            };
-
-            // get the media of padding and borders
-            elemMath.mediaBorder = (elemInfo.borderTop + elemInfo.borderBottom) / 2;
-            elemMath.mediaPadding = (elemInfo.paddingTop + elemInfo.paddingBottom) / 2;
-
-            // get the half minus of width and height
-            elemMath.halfWidth = (elemInfo.width / 2) * (-1);
-            elemMath.halfHeight = ((elemInfo.height / 2) * (-1));
-            elemMath.halfHeight -= elemMath.mediaPadding - elemMath.mediaBorder;
-
             // aplying the css
             this.getHolder().css({
-                'width': elemInfo.width,
-                'height': elemInfo.height,
-                'top': '50%',
-                'left': '50%',
-                'margin-top': elemMath.halfHeight,
-                'margin-left': elemMath.halfWidth
+                'width': $elem.width(),
+                'margin': '20px auto'
             });
 
-            // ie thinks different :)
-            // also, if popup is greater then the content window, we should adjust it
-            if ($.browser.msie && $.browser.version < 9) {
-                this.getHolder().css({
-                    'top': $(win).height() / 2 - elemInfo.height / 2,
-                    'margin-top': 0
-                });
-
-                if (parseInt(this.getHolder().css('top'), 10) < 0) {
-                    this.getHolder().css({'top': $(win).scrollTop(), 'position': 'absolute'});
-                }
-            } else {
-                if (elemInfo.height > $(win).height()) {
-                    this.getHolder().css({
-                        'top': 0,
-                        'margin-top': $(win).scrollTop(),
-                        'position': 'absolute'
-                    });
-                }
-            }
-
-            // check the current position
-            if (elemInfo.positionType === 'static') {
-                this.getHolder().parent().css('position', 'relative');
-            }
-
-            // showing element (always)
             $elem.show();
 
             return this;
@@ -259,7 +186,7 @@
             $holder.children().hide();
 
             // centerizing
-            this.centerize($holder.children());
+            this.show($holder.children());
 
             // the close trigger
             $holder.bind('jqFensterClose', function () {
@@ -274,7 +201,7 @@
 
             // resize trigger
             $holder.bind('jqFensterReposition', function () {
-                return that.centerize($holder.children());
+                return that.show($holder.children());
             });
 
             // close buttons
@@ -334,7 +261,8 @@
                     }
 
                     // data and marker cleanup, unlocking the current object
-                    $element.removeData(['jqFensterLocked', 'jqFensterHolder']);
+                    $element.removeData('jqFensterLocked')
+                        .removeData('jqFensterHolder');
                 }
             );
 
