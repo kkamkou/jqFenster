@@ -47,7 +47,7 @@
     var JqFenster = function (options, $element) {
         // defaults
         this.overlay = null;
-        this.options = options;
+        this.options = $.extend({}, options);
         this.element = $element;
         this.holder = null;
 
@@ -56,7 +56,7 @@
             var that = this;
 
             // default holder styles
-            this.holder = $('<div/>');
+            this.holder = $('<div/>').addClass('jqFensterHolder');
 
             // lets store some information
             $.data(this.holder.get(0), 'jqFenster', this);
@@ -161,11 +161,9 @@
                 return this;
             }
 
-            // aplying the css
-            this.getHolder().css({
-                'width': $elem.width(),
-                'margin': '20px auto'
-            });
+            // applying css rules.
+            // only the width, other attributes should be defined manually
+            this.getHolder().css('width', $elem.width());
 
             $elem.show();
 
@@ -211,8 +209,7 @@
             });
 
             // linking holder with the ancestor
-            $holder.addClass('jqFensterHolder')
-                .data('jqFensterAncestor', $element);
+            $holder.data('jqFensterAncestor', $element);
 
             // storing holder
             $element.data('jqFensterHolder', $holder);
