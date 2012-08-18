@@ -198,7 +198,7 @@
             });
 
             // resize trigger
-            $holder.bind('jqFensterReposition', function () {
+            $holder.bind('jqFensterRedraw', function () {
                 return that.show($holder.children());
             });
 
