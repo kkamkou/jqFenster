@@ -8,113 +8,146 @@
         <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/print.css" type="text/css" media="print">
         <link rel="stylesheet" href="http://yandex.st/highlightjs/7.1/styles/github.min.css" media="screen, projection">
 
+        <!-- jqEbony iPad and IE fixes -->
+        <link rel="stylesheet" href="https://raw.github.com/kkamkou/jqEbony/master/fix-ipad.css">
+        <link rel="stylesheet" href="https://raw.github.com/kkamkou/jqEbony/master/fix-ie.css">
+
         <style type="text/css">
             body{ background-color: #FFFCE3; }
             div.container{ margin-top: 20px; }
             pre{ margin: 0; }
+            div.modal{ background-color: #FFF; width: 400px; height: 200px; border: 1px solid #000; display: none; }
         </style>
     </head>
 
     <body>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="http://yandex.st/highlightjs/7.1/highlight.min.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                $('div.code').each(
+                    function (i, e) {
+                        $(this).wrap('<pre><code></code></pre>');
+                        hljs.tabReplace = '    ';
+                        hljs.highlightBlock(e, null);
+                    }
+                );
+            });
+        </script>
 
+        <!-- Full installation -->
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster-helper.js"></script>
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqEbony/master/jquery.ebony.js"></script>
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster.js"></script>
 
-        <script type="text/javascript" src="http://yandex.st/highlightjs/7.1/highlight.min.js"></script>
-
         <!-- Examples -->
-        <script type="text/javascript">
-            jQuery(function() {
-                $('div.code').each(
-                    function (i, e) {
-                        $(this).wrap('<pre><code></code></pre>');
-                        hljs.highlightBlock(e, null, true);
-                    }
-                );
+        <div class="container">
+            <h2>jqFenster</h2>
 
-                jQuery('#callbackOpenChanger').bind('click', function () {
-                    jQuery.jqFensterOptions.callbackOpen = function() {
+            <p><i>Lightweight Modal <b>Framework</b></i></p>
+
+            <h3>Examples (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js" style="color:red">jquery.fenster.js</a>)</h3>
+
+            <table>
+                <tr>
+                    <td>
+                        1. <a href="#" data-selector="#target" class="jqFenster">Simple link</a>
+                        <div class="code">&lt;a href="#" data-selector="#target" class="jqFenster">Simple link&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation</a>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation</a>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        4. <a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback</a>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        5. <a href="#" data-selector="#targetThird" class="jqFenster">Popup in Popup</a>
+                        <div class="code">&lt;a href="#" data-selector="#targetThird" class="jqFenster">Popup in Popup&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        6. <a href="remote.html" class="jqFenster">Remote one</a>
+                        <div class="code">&lt;a href="remote.html" class="jqFenster">Remote one&lt;/a></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        7. <button data-selector="#targetSecond" class="jqFenster">I'm button</button>
+                        <div class="code">&lt;button data-selector="#targetSecond" class="jqFenster">I'm button&lt;/button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        8. <button id="callbackOpenChanger">change the callbackOpen option globally</button>
+                        <div class="code">&lt;button id="callbackOpenChanger">change the callbackOpen option globally&lt;/button></div>
+<div class="code">$('#callbackOpenChanger').bind('click', function () {
+    // global option for the jqFenster
+    $.jqFensterOptions.callbackOpen = function() {
+        alert('You have changed it globally');
+    };
+
+    // opens modal using object
+    $.fenster('#target').open();
+
+    return false;
+});</div>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Examples (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster.js" style="color:red">jquery.fenster.js</a>)</h3>
+
+            Soon...
+        </div>
+
+        <!-- Inline elements-->
+        <div id="target" class="modal">
+            Hello, I'm the #target
+        </div>
+
+        <div id="targetSecond" class="modal">
+            Hello, I'm the #targetSecond,<br />
+            <a href="#" class="jqFensterClose">[CloseMe]</a>
+        </div>
+
+        <div id="targetThird" class="modal">
+            Hello, I'm the #targetThird<br />
+            <a href="#" data-selector="#targetSecond" class="jqFenster">[Another]</a>
+            <a href="#" class="jqFensterClose">[CloseMe]</a>
+        </div>
+
+        <!-- javascript part -->
+        <script type="text/javascript">
+            $(function () {
+                $('#callbackOpenChanger').bind('click', function () {
+                    // global option for the jqFenster
+                    $.jqFensterOptions.callbackOpen = function() {
                         alert('You have changed it globally');
                     };
 
-                    jQuery.fenster('#target').open();
+                    // opens modal using object
+                    $.fenster('#target').open();
 
                     return false;
                 });
             });
-        </script>
-
-        <div class="container">
-            <h2>jqFenster</h2>
-
-            <p><i>Lightweight popup framework</i></p>
-
-            <h3>Examples (Inline)</h3>
-                <table>
-                    <tr>
-                        <td>
-                            <a href="/some/thing" data-selector="#target" class="jqFenster">Simple link</a>
-                            <div class="code">&lt;a href="/some/thing" data-selector="#target" class="jqFenster"&gt;Simple link&lt;/a&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation</a>
-                            <div class="code">&lt;a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation&lt;/a&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation</a>
-                            <div class="code">&lt;a href="/some/thing" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation&lt;/a&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="/some/thing" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback</a>
-                            <div class="code">&lt;a href="/some/thing" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback&lt;/a&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="remote.html" class="jqFenster">Remote one</a>
-                            <div class="code">&lt;a href="remote.html" class="jqFenster">Remote one&lt;/a&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button data-selector="#targetSecond" class="jqFenster">I'm button</button>
-                            <div class="code">&lt;button data-selector="#targetSecond" class="jqFenster">I'm button&lt;/button&gt;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button id="callbackOpenChanger">change the callbackOpen option globally</button>
-                            <div class="code">&lt;button id="callbackOpenChanger">change the callbackOpen option globally&lt;/button&gt;</div>
-                        </td>
-                    </tr>
-                </table>
 
 
-
-
-
-
-
-
-            <h3>Examples (JS)</h3>
-            And much more... See the source file:
-            <a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js">https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js</a>
-
-            <div id="target" style="display: none;width: 100px;height: 100px;background-color: #FFF;">hello, I'm the #target</div>
-            <div id="targetSecond" style="display: none;width: 100px;height: 100px;background-color: #FFF;">
-                hello, I'm the #targetSecond, <a href="#" class="jqFensterClose">close me</a>
-            </div>
-        </div>
-
-        <script type="text/javascript">
             function myOpen() {
                 alert('open');
             }
