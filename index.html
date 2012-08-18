@@ -4,9 +4,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>jqFenster</title>
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection">
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/print.css" type="text/css" media="print">
-        <link rel="stylesheet" href="http://yandex.st/highlightjs/7.1/styles/github.min.css" media="screen, projection">
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/print.css" type="text/css" media="print" />
+        <link rel="stylesheet" href="http://yandex.st/highlightjs/7.1/styles/github.min.css" media="screen, projection" />
 
         <!-- jqEbony iPad and IE fixes -->
         <link rel="stylesheet" href="https://raw.github.com/kkamkou/jqEbony/master/fix-ipad.css">
@@ -21,7 +24,7 @@
     </head>
 
     <body>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
         <script type="text/javascript" src="http://yandex.st/highlightjs/7.1/highlight.min.js"></script>
         <script type="text/javascript">
             $(function() {
@@ -37,8 +40,8 @@
 
         <!-- Full installation -->
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster-helper.js"></script>
-        <script type="text/javascript" src="https://raw.github.com/kkamkou/jqEbony/master/jquery.ebony.js"></script>
-        <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster.js"></script>
+        <script type="text/javascript" src="jquery.ebony.js"></script>
+        <script type="text/javascript" src="jquery.fenster.js"></script>
 
         <!-- Examples -->
         <div class="container">
@@ -46,7 +49,7 @@
 
             <p><i>Lightweight Modal <b>Framework</b></i></p>
 
-            <h3>Examples (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js" style="color:red">jquery.fenster.js</a>)</h3>
+            <h3>DOM Helpers (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js" style="color:red">jquery.fenster.js</a>)</h3>
 
             <table>
                 <tr>
@@ -110,9 +113,24 @@
                 </tr>
             </table>
 
-            <h3>Examples (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster.js" style="color:red">jquery.fenster.js</a>)</h3>
+            <h3>API (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster.js" style="color:red">jquery.fenster.js</a>)</h3>
 
-            Soon...
+            <table id="api">
+                <tr>
+                    <td>
+                        1. <button>Open modal window #1</button>, <button>Open modal window #2</button>, <button>Open modal window #3</button>
+                        <div class="code">
+// variant no.1
+$('#targetJsApiFirst').fenster().open();
+
+// variant no.2
+$.fenster('#target').open();
+
+// variant no.3
+$.fenster($('#target')).open();</div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Inline elements-->
@@ -129,6 +147,11 @@
             Hello, I'm the #targetThird<br />
             <a href="#" data-selector="#targetSecond" class="jqFenster">[Another]</a>
             <a href="#" class="jqFensterClose">[CloseMe]</a>
+        </div>
+
+        <div id="targetJsApiFirst" class="modal">
+            Hello, I'm the #targetJsApiFirst<br />
+            <button>Close</button>
         </div>
 
         <!-- javascript part -->
@@ -155,6 +178,28 @@
             function myClose() {
                 alert('close');
             }
+        </script>
+
+        <!-- API bindings -->
+        <script type="text/javascript">
+            $(function () {
+                var $modal =  $('#target').fenster();
+
+                $('table#api button:first').bind('click', function () {
+                    $('#targetJsApiFirst').fenster().open();
+                    return false;
+                }).next().bind('click', function () {
+                    $.fenster('#target').open();
+                    return false;
+                }).next().bind('click', function () {
+                    $.fenster($('#target')).open();
+                    return false;
+                });
+
+                $('#targetJsApiFirst button').bind('click', function () {
+                    $.fensterFinder(this).close();
+                });
+            });
         </script>
     </body>
 </html>
