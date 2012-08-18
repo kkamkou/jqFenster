@@ -30,8 +30,8 @@
     "use strict";
 
     // the main object
-    var jqFenster = function ($elem, options) {
-        this.holder = $elem.data('jqFensterHolder');
+    var JqFensterApi = function ($elem, options) {
+        this.holder = $elem.data('jqFensterHolder') || null;
         this.element = $elem;
 
         // options merge
@@ -45,17 +45,17 @@
     };
 
     // overloaded functions
-    jqFenster.prototype = {
+    JqFensterApi.prototype = {
         close: function () {
-            if (this.holder) {
-                this.holder.trigger('jqFensterClose');
+            if (this.getHolder()) {
+                this.getHolder().trigger('jqFensterClose');
                 this.holder = null;
             }
             return this;
         },
 
         open: function () {
-            if (!this.holder) {
+            if (!this.getHolder()) {
                 this.element.trigger('click');
             }
             return this;
@@ -67,8 +67,8 @@
         },
 
         redraw: function () {
-            if (this.holder) {
-                this.holder.trigger('jqFensterReposition');
+            if (this.getHolder()) {
+                this.getHolder().trigger('jqFensterRedraw');
             }
             return this;
         },
@@ -78,15 +78,21 @@
         },
 
         getElement: function () {
-            return this.holder ? this.holder.data('jqFensterAncestor') : null;
+            return this.getHolder()
+                ? this.getHolder().data('jqFensterAncestor') : null;
         },
 
         setOptions: function (options) {
-            this.options = $.extend({
-                'href': null,
-                'selector': null,
-                'options': null
-            }, options || {});
+            this.options = $.extend(
+                {'href': null, 'selector': null, 'options': null},
+                options || {}
+            );
+
+            // options correction
+            if (!this.options.selector && this.element.selector) {
+                this.options.selector = this.element.selector;
+            }
+
             return this;
         },
 
@@ -112,7 +118,7 @@
 
     // jQuery plugin
     $.fn.fenster = function (options) {
-        return new jqFenster(this, options);
+        return new JqFensterApi(this, options);
     };
 
     // helps to find/creatre the jqFenster object
@@ -135,15 +141,15 @@
 
         // quick helper
         fenster: function (options) {
-            var $elem = $('<a />');
+            var $elem = $('<a />', {css: {display: 'none'}}).appendTo('body');
 
             // quick helper for the jQuery selector
-            if (typeof (options) === 'string') {
+            if ($.type(options) === 'string') {
                 options = {'selector': options};
             }
 
             // quick helper for the jQuery object
-            if (typeof (options) === 'object' && options.selector) {
+            if ($.type(options) === 'object' && options.selector) {
                 options = {'selector': options.selector};
             }
 
