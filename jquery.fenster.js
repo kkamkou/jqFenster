@@ -18,7 +18,6 @@
  *      jQuery('.myElement').fenster({'href': 'newUri'}).reInit();
  *
  *  Owners (working in the opened popup)
- *      jQuery.fensterFinder(this).redraw()
  *      jQuery.fensterFinder(this).setOptions({'href': 'newUri'}).reInit();
  *
  *  Anonymous (creates popup on the fly)
@@ -37,6 +36,11 @@
         // options merge
         this.setOptions(options);
 
+        // default options correction
+        if (!this.options.selector && this.element.selector) {
+            this.options.selector = this.element.selector;
+        }
+
         // dynamic object requires custom init
         if (!this.element.hasClass('jqFenster')) {
             this.element.addClass('jqFenster');
@@ -49,27 +53,25 @@
         close: function () {
             if (this.getHolder()) {
                 this.getHolder().trigger('jqFensterClose');
-                this.holder = null;
+                this.setHolder(null);
             }
             return this;
         },
 
         open: function () {
-            if (!this.getHolder()) {
-                this.element.trigger('click');
-            }
-            return this;
+            return this.getHolder() ? this : this.setHolder(
+                this.element.trigger('click').data('jqFensterHolder')
+            );
         },
 
         reInit: function () {
-            this.close()._init().open();
-            return this;
-        },
+            this.close();
 
-        redraw: function () {
-            if (this.getHolder()) {
-                this.getHolder().trigger('jqFensterRedraw');
-            }
+            var that = this;
+            setTimeout(function () {
+                that._init().open();
+            }, 100);
+
             return this;
         },
 
@@ -77,9 +79,14 @@
             return this.holder;
         },
 
-        getElement: function () {
+        getAncestor: function () {
             return this.getHolder()
                 ? this.getHolder().data('jqFensterAncestor') : null;
+        },
+
+        setHolder: function (obj) {
+            this.holder = obj;
+            return this;
         },
 
         setOptions: function (options) {
@@ -87,23 +94,17 @@
                 {'href': null, 'selector': null, 'options': null},
                 options || {}
             );
-
-            // options correction
-            if (!this.options.selector && this.element.selector) {
-                this.options.selector = this.element.selector;
-            }
-
             return this;
         },
 
         _init: function () {
             // href
-            if (this.options.href) {
+            if (this.options.href !== null) {
                 this.element.data('href', this.options.href);
             }
 
             // selector
-            if (this.options.selector) {
+            if (this.options.selector !== null) {
                 this.element.data('selector', this.options.selector);
             }
 
@@ -125,13 +126,16 @@
     $.extend({
         // working inside opened window
         fensterFinder: function (target) {
+            var $target = $(target),
+                $elem = null;
+
             // target is link already
-            if ($(target).data('jqFensterHolder')) {
-                return $(target).fenster(target.data('options'));
+            if ($target.data('jqFensterHolder')) {
+                return $target.fenster($target.data('options'));
             }
 
             // trying to find the link holder
-            var $elem = $(target).parents('.jqFensterHolder');
+            $elem = $target.closest('.jqFensterHolder');
             if ($elem.length) {
                 return $($elem.data('jqFensterAncestor')).fenster();
             }

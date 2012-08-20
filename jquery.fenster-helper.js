@@ -153,11 +153,15 @@
         },
 
         // move window to the center of a screen
-        show: function ($elem) {
+        show: function () {
+            // making sure that the inner content is hidden
+            // avoiding browser issues
+            var $elem = this.getHolder().children().hide();
+
             // cycling to get the element height
             if (!$elem.height()) {
                 var that = this;
-                setTimeout(function () { that.show($elem); }, 30);
+                setTimeout(function () { that.show(); }, 30);
                 return this;
             }
 
@@ -165,6 +169,7 @@
             // only the width, other attributes should be defined manually
             this.getHolder().css('width', $elem.width());
 
+            // visibility change
             $elem.show();
 
             return this;
@@ -172,19 +177,16 @@
 
         // content switch and show
         create: function (target) {
+            // defaults
             var that = this,
-                $element = this.getElement(),
-                $holder = this.getHolder();
+                $holder = this.getHolder(),
+                $element = this.getElement();
 
             // DOM corrections
             $holder.empty().append(target);
 
-            // making sure that the inner content is hidden
-            // avoiding browser issues
-            $holder.children().hide();
-
-            // centerizing
-            this.show($holder.children());
+            // inline area visibility
+            this.show();
 
             // the close trigger
             $holder.bind('jqFensterClose', function () {
@@ -192,14 +194,8 @@
                 if ($.type(that.getOverlay()) === 'object') {
                     that.getOverlay().close();
                     that.setOverlay(null);
-                    return that;
                 }
                 return that.close();
-            });
-
-            // resize trigger
-            $holder.bind('jqFensterRedraw', function () {
-                return that.show($holder.children());
             });
 
             // close buttons
@@ -219,13 +215,13 @@
                 this.setOverlay(
                     $($holder).jqEbony({
                         'animationSpeed': this.options.animationSpeed,
-                        'callbackClose': function (instance) {
+                        'callbackClose': function () {
                             return that.close.apply(
-                                $.data(instance.getElement().get(0), 'jqFenster')
+                                $.data(this.getElement().get(0), 'jqFenster')
                             );
                         },
                         'callbackOpen': function () {
-                            $holder.trigger('jqFensterCallbackOpen');
+                            return $holder.trigger('jqFensterCallbackOpen');
                         }
                     }).open()
                 );
@@ -252,9 +248,9 @@
 
                     // DOM cleanup
                     if (!$element.data('selector')) {
-                        $holder.parent().remove();
+                        $holder.remove();
                     } else {
-                        $(this).unwrap().unwrap();
+                        $(this).unwrap();
                     }
 
                     // data and marker cleanup, unlocking the current object
