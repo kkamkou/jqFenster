@@ -13,8 +13,7 @@
  *  jquery.fenster-helper.js
  *
  *  Link selectors (if we have information about link only)
- *      jQuery('.myElement').fenster().open();
- *      jQuery('.myElement').fenster().close();
+ *      jQuery('.myElement').fenster().open().close();
  *      jQuery('.myElement').fenster({'href': 'newUri'}).reInit();
  *
  *  Owners (working in the opened popup)
@@ -23,7 +22,6 @@
  *  Anonymous (creates popup on the fly)
  *      jQuery.fenster({'href': 'uri'}).open();
  *      jQuery.fenster('#myPopup').open();
- *      jQuery.fenster(jQuery('#myPopup')).open();
  */
 (function ($) {
     "use strict";
@@ -145,16 +143,14 @@
 
         // quick helper
         fenster: function (options) {
-            var $elem = $('<a />', {css: {display: 'none'}}).appendTo('body');
+            var $elem = $('<a />', {css: {display: 'none'}});
+
+            // DOM update
+            $('body').append($elem);
 
             // quick helper for the jQuery selector
             if ($.type(options) === 'string') {
                 options = {'selector': options};
-            }
-
-            // quick helper for the jQuery object
-            if ($.type(options) === 'object' && options.selector) {
-                options = {'selector': options.selector};
             }
 
             return $($elem).fenster(options);
