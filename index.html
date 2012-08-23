@@ -22,8 +22,10 @@
             body{ background-color: #FFFCE3; font: 14px "Trebuchet MS", "Tahoma"; }
             div.container{ margin-top: 20px; }
             pre{ margin: 0; }
-            div.modal{ background-color: #FFF; width: 400px; height: 200px; border: 1px solid #000; display: none; }
+            div.modal{ background-color: #FFF; width: 400px; border: 1px solid #000; display: none; margin: 0 auto; margin-top: 20px; }
         </style>
+
+        <link rel="stylesheet" href="_misc/skin-fenster.css">
     </head>
 
     <body>
@@ -43,8 +45,9 @@
         </script>
 
         <!-- Full installation -->
-        <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster-helper.js"></script>
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqEbony/master/jquery.ebony.js"></script>
+        <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster-helper.js"></script>
+        <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster-helper-template-table.js"></script>
         <script type="text/javascript" src="https://raw.github.com/kkamkou/jqFenster/master/jquery.fenster.js"></script>
 
         <!-- Examples -->
@@ -172,18 +175,27 @@ $('#reinitAnother').bind('click', function () {
 
         <!-- Inline elements-->
         <div id="target" class="modal">
-            Hello, I'm the #target
+            <div class="modal-content">
+                <h4>Hello, I'm the #target</h4>
+                <hr>
+                <a href="#" class="jqFensterClose">Close me please.</a>
+            </div>
+            <a href="#" class="jqFensterClose modal-close">&times;</a>
         </div>
 
         <div id="targetSecond" class="modal">
-            Hello, I'm the #targetSecond,<br />
-            <a href="#" class="jqFensterClose">[CloseMe]</a>
+            <div class="modal-content">
+                Hello, I'm the #targetSecond,<br />
+                <a href="#" class="jqFensterClose">[CloseMe]</a>
+            </div>
         </div>
 
         <div id="targetThird" class="modal">
-            Hello, I'm the #targetThird<br />
-            <a href="#" data-selector="#targetSecond" class="jqFenster">[Another]</a>
-            <a href="#" class="jqFensterClose">[CloseMe]</a>
+            <div class="modal-content">
+                Hello, I'm the #targetThird<br />
+                <a href="#" data-selector="#targetSecond" class="jqFenster">[Another]</a>
+                <a href="#" class="jqFensterClose">[CloseMe]</a>
+            </div>
         </div>
 
         <!-- javascript part -->
