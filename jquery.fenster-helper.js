@@ -38,9 +38,34 @@
     // default set of options
     $.jqFensterOptions = {
         'noOverlay': false,
-        'animationSpeed': 1, // in ms, for example: 200, 400 or 800
+        'animationSpeed': 0, // in ms, for example: 200, 400 or 800
         'callbackOpen': null,
-        'callbackClose': null
+        'callbackClose': null,
+        'template': null
+    };
+
+    // default template engine
+    $.jqFensterOptions.template = {
+
+        // initial corrections
+        prepare: function () {
+            return this.children().hide();
+        },
+
+        // content modification
+        inject: function (content) {
+            this.empty().append(content);
+        },
+
+        // DOM cleanup (ajax used)
+        cleanupRemote: function () {
+            return this.remove();
+        },
+
+        // DOM cleanup (selector used)
+        cleanupSelector: function () {
+            return this.children().hide().unwrap();
+        }
     };
 
     // main class
@@ -156,7 +181,7 @@
         show: function () {
             // making sure that the inner content is hidden
             // avoiding browser issues
-            var $elem = this.getHolder().children().hide();
+            var $elem = this.options.template.prepare.call(this.getHolder());
 
             // cycling to get the element height
             if (!$elem.height()) {
@@ -167,7 +192,7 @@
 
             // applying css rules.
             // only the width, other attributes should be defined manually
-            this.getHolder().css('width', $elem.width());
+            this.getHolder().children().css('width', $elem.width());
 
             // visibility change
             $elem.show();
@@ -180,10 +205,8 @@
             // defaults
             var that = this,
                 $holder = this.getHolder(),
-                $element = this.getElement();
-
-            // DOM corrections
-            $holder.empty().append(target);
+                $element = this.getElement(),
+                $injected = this.options.template.inject.call($holder, target);
 
             // inline area visibility
             this.show();
@@ -214,6 +237,7 @@
             if (!this.options.noOverlay && $.type($.fn.jqEbony) !== 'undefined') {
                 this.setOverlay(
                     $($holder).jqEbony({
+                        'clickCloseArea': $injected,
                         'animationSpeed': this.options.animationSpeed,
                         'callbackClose': function () {
                             return that.close.apply(
@@ -236,22 +260,25 @@
 
         // closes popup
         close: function () {
+            // defaults
             var $element = this.getElement(),
-                $holder = this.getHolder();
+                $holder = this.getHolder(),
+                that = this;
 
             // removing current window
-            $holder.children().fadeOut(
-                this.options.animationSpeed,
+            $holder.fadeOut(
+                that.getOverlay() ? 0 : that.options.animationSpeed,
                 function () {
                     // calling default callback
                     $holder.trigger('jqFensterCallbackClose');
 
                     // DOM cleanup
-                    if (!$element.data('selector')) {
-                        $holder.remove();
-                    } else {
-                        $(this).unwrap();
-                    }
+                    $.proxy(
+                        $element.data('selector')
+                            ? that.options.template.cleanupSelector
+                            : that.options.template.cleanupRemote,
+                        $(this)
+                    )();
 
                     // data and marker cleanup, unlocking the current object
                     $element.removeData('jqFensterLocked')
