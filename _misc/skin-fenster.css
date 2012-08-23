@@ -1,4 +1,3 @@
-
 .jqFensterHolder { position: fixed; left: 0; top: 0; right: 0; bottom: 0; overflow: auto; margin: 0; padding: 0; border: 0; border-collapse: collapse; }
 *:first-child+html .jqFensterHolder { height: 100% }
 .jqFensterContainer { height: 100%; margin: 0 auto; }
