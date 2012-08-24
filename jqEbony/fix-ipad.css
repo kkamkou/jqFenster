@@ -1,0 +1,7 @@
+div.jqEbony{
+    -webkit-overflow-scrolling: touch;
+}
+
+div.jqEbony > * {
+    -webkit-transform: translateZ(0px);
+}

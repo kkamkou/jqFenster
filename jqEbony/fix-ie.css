@@ -1,0 +1,5 @@
+/* IE6–IE8 */
+div.jqEbony{
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = #7F000000, endColorstr = #7F000000);
+    zoom: 1;
+}
