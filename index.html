@@ -58,6 +58,54 @@
 
             <hr />
 
+            <h3>Installation</h3>
+
+            <hr />
+
+            <table>
+                <tr>
+                    <td>
+                        1. Styles (HEAD section)
+                        <div class="code">&lt;link rel="stylesheet" href="jquery.fenster.css" type="text/css" media="screen, projection" /></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2. Scripts (BODY section)
+                        <div class="code">&lt;script type="text/javascript" src="jquery.fenster.js">&lt;/script></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3. Default markup
+<div class="code">&lt;div class="jqFensterModal">
+    &lt;div class="jqFensterModalContent">Content&lt;/div>
+    &lt;a href="#" class="jqFensterClose jqFensterModalClose">&times;&lt;/a>
+&lt;/div></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        4. Advanced example (Adds the close button to opened modal)
+<div class="code">$.extend($.jqFensterOptions, {
+    'callbackOpen': function (ref) {
+        setTimeout(function () {
+            $.fensterFinder(ref).getHolder()
+                .find('div.jqFensterModal').append(
+                    $('&lt;a href="#"/>')
+                        .addClass('jqFensterModalClose jqFensterClose')
+                        .bind('click', function () {
+                            $.fensterFinder(this).close();
+                            return false;
+                        })
+                );
+        }, 100);
+    }
+});</div>
+                    </td>
+                </tr>
+            </table>
+
             <h3>DOM Helpers (<a href="https://github.com/kkamkou/jqFenster/blob/master/jquery.fenster-helper.js" style="color:red">jquery.fenster.js</a>)</h3>
 
             <table>
