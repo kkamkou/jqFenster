@@ -23,7 +23,7 @@
             body{ background-color: #FFFCE3; font: 14px "Trebuchet MS", "Tahoma"; }
             div.container{ margin-top: 20px; }
             pre{ margin: 0; }
-            div.modal{ width: 400px; }
+            div.jqFensterModal{ width: 400px; }
         </style>
     </head>
 
@@ -173,24 +173,24 @@ $('#reinitAnother').bind('click', function () {
         </div>
 
         <!-- Inline elements-->
-        <div id="target" class="modal">
-            <div class="modal-content">
+        <div id="target" class="jqFensterModal">
+            <div class="jqFensterModalContent">
                 <h4>Hello, I'm the #target</h4>
                 <hr>
                 <a href="#" class="jqFensterClose">Close me please.</a>
             </div>
-            <a href="#" class="jqFensterClose modal-close">&times;</a>
+            <a href="#" class="jqFensterClose jqFensterModalClose">&times;</a>
         </div>
 
-        <div id="targetSecond" class="modal">
-            <div class="modal-content">
+        <div id="targetSecond" class="jqFensterModal">
+            <div class="jqFensterModalContent">
                 Hello, I'm the #targetSecond,<br />
                 <a href="#" class="jqFensterClose">[CloseMe]</a>
             </div>
         </div>
 
-        <div id="targetThird" class="modal">
-            <div class="modal-content">
+        <div id="targetThird" class="jqFensterModal">
+            <div class="jqFensterModalContent">
                 Hello, I'm the #targetThird<br />
                 <a href="#" data-selector="#targetSecond" class="jqFenster">[Another]</a>
                 <a href="#" class="jqFensterClose">[CloseMe]</a>

@@ -1,8 +1,10 @@
-.jqFensterHolder { position: fixed; left: 0; top: 0; right: 0; bottom: 0; overflow: auto; margin: 0; padding: 0; border: 0; border-collapse: collapse; }
-*:first-child+html .jqFensterHolder { height: 100%; }
-.jqFensterContainer { height: 100%; margin: 0 auto; }
-.jqFensterContent { padding: 24px; margin: 0; border: 0; vertical-align: middle; }
+/* table template engine */
+div.jqFensterHolder { position: fixed; left: 0; top: 0; right: 0; bottom: 0; overflow: auto; margin: 0; padding: 0; border: 0; border-collapse: collapse; }
+*:first-child+html div.jqFensterHolder { height: 100%; }
+table.jqFensterContainer { height: 100%; margin: 0 auto; }
+td.jqFensterContent { padding: 24px; margin: 0; border: 0; vertical-align: middle; }
 
-div.modal { background-color: #5c5959; padding: 5px; border: 0; box-shadow: 0 0 10px 2px #333333; position: relative; display: none; }
-    div.modal .modal-content { background-color: #FFF; padding: 10px; }
-    div.modal .modal-close { padding: 1px 7px; background-color: #5c5959; text-decoration: none; color: #FFF; font-size: 110%; position: absolute; right: 10px; top: 10px; }
+/* custom styles */
+div.jqFensterModal { background-color: #5c5959; padding: 5px; border: 0; position: relative; display: none; box-shadow: 0 0 10px 2px #333333; }
+    div.jqFensterModal div.jqFensterModalContent { background-color: #FFF; padding: 10px; }
+    div.jqFensterModal a.jqFensterModalClose { padding: 1px 7px; background-color: #5c5959; text-decoration: none; color: #FFF; font-size: 110%; position: absolute; right: 10px; top: 10px; }
