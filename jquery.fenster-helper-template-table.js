@@ -13,7 +13,6 @@
 
     // centerized template engine (table used)
     $.jqFensterOptions.template = {
-
         // initial corrections
         prepare: function () {
             return this.find('td.jqFensterContent').children().hide();
@@ -37,6 +36,16 @@
                 this.find('td.jqFensterContent').children().hide()
             );
             return this.remove();
+        },
+
+        // shows the loader element
+        loaderShow: function () {
+            return this.append('<div class="jqFensterLoading"><p></p></div>');
+        },
+
+        // removes the loader element
+        loaderRemove: function () {
+            return this.find('div.jqFensterLoading').remove();
         }
     };
 }(jQuery));

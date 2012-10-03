@@ -170,9 +170,18 @@
 
             var that = this;
 
+            // loader animation
+            this.options.template.loaderShow.call(this.getHolder());
+
             // preload content from the href
             $.get((this.getElement().data('href') || this.getElement().attr('href')))
-                .done(function (data) { that.create(data); });
+                .done(function (data) {
+                    // loader remove
+                    that.options.template.loaderRemove.call(that.getHolder());
+
+                    // modal creation process
+                    that.create(data);
+                });
 
             return this;
         },
