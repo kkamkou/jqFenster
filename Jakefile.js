@@ -1,3 +1,13 @@
+// nodejs env check
+if (!process.env.NODE_PATH) {
+    console.log('$NODE_PATH is undefined!');
+    console.log('Run: export NODE_PATH="__NODEJS_MODULES__"');
+    console.log('Example: export NODE_PATH="/usr/lib/node_modules"');
+    console.log('Or: export NODE_PATH="npm root"');
+    process.exit(1);
+}
+
+// namespaces
 var fs   = require('fs'),
     path = require('path'),
     util = require('util'),
@@ -5,6 +15,7 @@ var fs   = require('fs'),
     ugu  = require('uglify-js').uglify,
     csso = require('csso');
 
+// defaults
 var src   = __dirname,
     files = {
         'jquery.fenster.full.js': [
@@ -18,13 +29,13 @@ var src   = __dirname,
     };
 
 function getComment () {
-    var version = '1.0',
+    var version = '1.0.1',
         date = new Date(),
         buildDate = date.getFullYear() + '-' +
             (date.getMonth() >= 9 ? '' : '0') + (date.getMonth() + 1) + '-' +
             (date.getDate() >= 10 ? '' : '0') + date.getDate();
 
-    return '/*!\n' +
+    return '/**\n' +
         ' * jqFenster - Lightweight Modal Framework\n' +
         ' * Version: ' + version + ' (' + buildDate + ')\n' +
         ' * https://github.com/kkamkou/jqFenster\n' +

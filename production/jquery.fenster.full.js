@@ -1,6 +1,6 @@
-/*!
+/**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.0 (2012-10-03)
+ * Version: 1.0.1 (2012-10-04)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
