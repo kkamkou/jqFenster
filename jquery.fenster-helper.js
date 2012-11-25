@@ -102,16 +102,16 @@
                         $element, e.toString()
                     ]);
                 }
+            }
 
-                // open event redeclaration
-                if ($.type(this.options.callbackOpen) === 'string') {
-                    this.options.callbackOpen = win[this.options.callbackOpen];
-                }
+            // open event redeclaration
+            if ($.type(this.options.callbackOpen) === 'string') {
+              this.options.callbackOpen = win[this.options.callbackOpen];
+            }
 
-                // close event redeclaration
-                if ($.type(this.options.callbackClose) === 'string') {
-                    this.options.callbackClose = win[this.options.callbackClose];
-                }
+            // close event redeclaration
+            if ($.type(this.options.callbackClose) === 'string') {
+              this.options.callbackClose = win[this.options.callbackClose];
             }
 
             // creating callback for the open event

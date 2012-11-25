@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.0.1 (2012-10-04)
+ * Version: 1.0.1 (2012-11-25)
  * https://github.com/kkamkou/jqFenster
  */
 
@@ -41,3 +41,19 @@ div.jqFensterLoading { position: fixed; top: 44%; left: 48%; width: 25px; height
     100% { -webkit-transform:rotate(-360deg); }
 }
 
+
+/* File: jqEbony/fix-ie.css */
+/* IE6–IE8 */
+div.jqEbony{
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = #7F000000, endColorstr = #7F000000);
+    zoom: 1;
+}
+
+/* File: jqEbony/fix-ipad.css */
+div.jqEbony{
+    -webkit-overflow-scrolling: touch;
+}
+
+div.jqEbony > * {
+    -webkit-transform: translateZ(0px);
+}

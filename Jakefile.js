@@ -1,30 +1,33 @@
+// npm install uglify-js@1.3.4
+// and deps.
+
 // nodejs env check
 if (!process.env.NODE_PATH) {
     console.log('$NODE_PATH is undefined!');
     console.log('Run: export NODE_PATH="__NODEJS_MODULES__"');
-    console.log('Example: export NODE_PATH="/usr/lib/node_modules"');
+    console.log('Example: export NODE_PATH="/usr/lib/node_modules" or "/usr/local/lib/node_modules"');
     console.log('Or: export NODE_PATH="npm root"');
     process.exit(1);
 }
 
 // namespaces
 var fs   = require('fs'),
-    path = require('path'),
-    util = require('util'),
     ugp  = require('uglify-js').parser,
     ugu  = require('uglify-js').uglify,
     csso = require('csso');
 
 // defaults
-var src   = __dirname,
-    files = {
+var files = {
         'jquery.fenster.full.js': [
             'jquery.fenster.js',
             'jquery.fenster-helper.js',
-            'jquery.fenster-helper-template-table.js'
+            'jquery.fenster-helper-template-table.js',
+            'jqEbony/jquery.ebony.js'
         ],
         'jquery.fenster.full.css': [
-            'jquery.fenster.css'
+            'jquery.fenster.css',
+            'jqEbony/fix-ie.css',
+            'jqEbony/fix-ipad.css'
         ]
     };
 
@@ -69,7 +72,8 @@ file(
         }
 
         fs.writeFileSync(this.name, getComment() + data);
-    });
+    }
+);
 
 // Css
 desc('optimize jquery.fenster.full.css');
