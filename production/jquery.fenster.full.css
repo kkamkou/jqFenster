@@ -17,7 +17,7 @@ div.jqFensterModal { background-color: #5c5959; padding: 5px; border: 0; positio
     div.jqFensterModal a.jqFensterModalClose { padding: 1px 7px; background-color: #5c5959; text-decoration: none; color: #FFF; font-size: 110%; position: absolute; right: 10px; top: 10px; }
 
 /* Loader animation */
-div.jqFensterLoading { position: fixed; top: 44%; left: 47%; width: 25px; height: 25px; background-color: rgba(0,0,0,.7); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; padding: 10px; }
+div.jqFensterLoading { position: fixed; top: 44%; left: 48.5%; width: 25px; height: 25px; background-color: rgba(0,0,0,.7); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; padding: 10px; }
     div.jqFensterLoading p { background-color: transparent; border: 5px solid #FFF; border-top: 5px solid rgba(0,0,0,0); border-left: 5px solid rgba(0,0,0,0); border-radius: 50px; width: 15px; height: 15px; margin: 0 auto; -moz-animation: jqFensterSpin .5s infinite linear; -webkit-animation: jqFensterSpin .5s infinite linear; }
 
 /* Keyframe rules */
