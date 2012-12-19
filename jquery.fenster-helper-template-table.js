@@ -9,43 +9,43 @@
  */
 
 (function ($) {
-    "use strict";
+  "use strict";
 
-    // centerized template engine (table used)
-    $.jqFensterOptions.template = {
-        // initial corrections
-        prepare: function () {
-            return this.find('td.jqFensterContent').children().hide();
-        },
+  // centerized template engine (table used)
+  $.jqFensterOptions.template = {
+    // initial corrections
+    prepare: function () {
+      return this.find('td.jqFensterContent').children().hide();
+    },
 
-        // content modification
-        inject: function (content) {
-            return this.append(
-                '<table class="jqFensterContainer"><tr><td class="jqFensterContent"></td></tr></table>'
-            ).find('td.jqFensterContent').append(content);
-        },
+    // content modification
+    inject: function (content) {
+      return this.append(
+        '<table class="jqFensterContainer"><tr><td class="jqFensterContent"></td></tr></table>'
+      ).find('td.jqFensterContent').append(content);
+    },
 
-        // DOM cleanup (ajax used)
-        cleanupRemote: function () {
-            return this.remove();
-        },
+    // DOM cleanup (ajax used)
+    cleanupRemote: function () {
+      return this.remove();
+    },
 
-        // DOM cleanup (selector used)
-        cleanupSelector: function () {
-            this.parent().append(
-                this.find('td.jqFensterContent').children().hide()
-            );
-            return this.remove();
-        },
+    // DOM cleanup (selector used)
+    cleanupSelector: function () {
+      this.parent().append(
+        this.find('td.jqFensterContent').children().hide()
+      );
+      return this.remove();
+    },
 
-        // shows the loader element
-        loaderShow: function () {
-            return this.append('<div class="jqFensterLoading"><p></p></div>');
-        },
+    // shows the loader element
+    beforeLoad: function () {
+      return this.append('<div class="jqFensterLoading"><p></p></div>');
+    },
 
-        // removes the loader element
-        loaderRemove: function () {
-            return this.find('div.jqFensterLoading').remove();
-        }
-    };
+    // removes the loader element
+    afterLoad: function () {
+      return this.find('div.jqFensterLoading').remove();
+    }
+  };
 }(jQuery));
