@@ -23,6 +23,8 @@
  *      jQuery.fenster({'href': 'uri'}).open();
  *      jQuery.fenster('#myPopup').open();
  */
+
+/*jshint jquery: true, browser: true, laxbreak: true */
 (function ($) {
   "use strict";
 
