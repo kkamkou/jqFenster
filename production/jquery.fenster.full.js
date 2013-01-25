@@ -84,7 +84,7 @@
       if (!this.getHolder()) {
         this.setHolder(this.element.trigger('click').data('jqFensterHolder'));
       }
-      return this.getHolder();
+      return this;
     },
 
     reInit: function () {
