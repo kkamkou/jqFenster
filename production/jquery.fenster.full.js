@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.1 (2012-12-19)
+ * Version: 1.2 (2013-01-25)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -46,7 +46,7 @@
   var JqFensterApi = function ($elem, options) {
     this.holder = $elem.data('jqFensterHolder') || null;
     this.element = $elem;
-    this.options = defaultOptions;
+    this.options = $.extend({}, defaultOptions);
 
     // options merge
     this.setOptions(options);
@@ -73,6 +73,7 @@
       return this;
     },
 
+    // DOM cleanup (removes <a> at the end of body)
     destroy: function () {
       if (this.options._destroyable) {
         this.element.remove();
@@ -80,9 +81,10 @@
     },
 
     open: function () {
-      return this.getHolder() ? this : this.setHolder(
-        this.element.trigger('click').data('jqFensterHolder')
-      );
+      if (!this.getHolder()) {
+        this.setHolder(this.element.trigger('click').data('jqFensterHolder'));
+      }
+      return this.getHolder();
     },
 
     reInit: function () {
