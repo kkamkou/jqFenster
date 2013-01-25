@@ -35,7 +35,7 @@
   var JqFensterApi = function ($elem, options) {
     this.holder = $elem.data('jqFensterHolder') || null;
     this.element = $elem;
-    this.options = defaultOptions;
+    this.options = $.extend({}, defaultOptions);
 
     // options merge
     this.setOptions(options);
@@ -62,6 +62,7 @@
       return this;
     },
 
+    // DOM cleanup (removes <a> at the end of body)
     destroy: function () {
       if (this.options._destroyable) {
         this.element.remove();
@@ -69,9 +70,10 @@
     },
 
     open: function () {
-      return this.getHolder() ? this : this.setHolder(
-        this.element.trigger('click').data('jqFensterHolder')
-      );
+      if (!this.getHolder()) {
+        this.setHolder(this.element.trigger('click').data('jqFensterHolder'));
+      }
+      return this.getHolder();
     },
 
     reInit: function () {
