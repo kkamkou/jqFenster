@@ -1,6 +1,6 @@
 {
     "name": "jqFenster",
-    "title": "jqFenster",
+    "title": "jQuery Fenster",
     "description": "Lightweight Modal Framework with API",
     "keywords": [
         "modal",
@@ -8,7 +8,7 @@
         "api",
         "window"
     ],
-    "version": "1.2",
+    "version": "1.2.1",
     "author": {
         "name": "Kanstantsin Kamkou",
         "url": "2ka.by"
