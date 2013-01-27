@@ -1,0 +1,29 @@
+{
+    "name": "jqFenster",
+    "title": "jqFenster",
+    "description": "Lightweight Modal Framework with API",
+    "keywords": [
+        "modal",
+        "popup",
+        "api",
+        "window"
+    ],
+    "version": "1.2",
+    "author": {
+        "name": "Kanstantsin Kamkou",
+        "url": "2ka.by"
+    },
+    "licenses": [
+        {
+            "type": "Boost Software License 1.0",
+            "url": "http://opensource.org/licenses/BSL-1.0"
+        }
+    ],
+    "bugs": "https://github.com/kkamkou/jqFenster/issues",
+    "homepage": "https://github.com/kkamkou/jqFenster",
+    "docs": "http://kkamkou.github.com/jqFenster",
+    "download": "https://github.com/kkamkou/jqFenster/archive/master.zip",
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}
