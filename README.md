@@ -6,22 +6,22 @@ Lightweight Modal Framework
 > [more examples and demo](http://kkamkou.github.com/jqFenster/)
 
 ## HTML injection
-Just add the **class="modal"** to element
+Just add the **class="jqFenster"** to element
 ```html
 <!-- anchor -->
-<a href="#" class="modal" data-selector="#myModal">open</a>
-<a href="/my/address/" class="modal">open</a>
-<a href="#" class="modal" data-href="/my/address/">open</a>
+<a href="#" class="jqFenster" data-selector="#myModal">open</a>
+<a href="/my/address/" class="jqFenster">open</a>
+<a href="#" class="jqFenster" data-href="/my/address/">open</a>
 
 <!-- advanced anchor -->
-<a href="#" class="modal"
+<a href="#" class="jqFenster"
   data-options='{animationSpeed: 200, noOverlay: true, callbackOpen: "myOpen", callbackClose: "myClose"}'>super-puper link</a>
 
 <!-- Button -->
-<button data-selector="#myModal" class="modal"></button>
+<button data-selector="#myModal" class="jqFenster"></button>
 
 <!-- and etc... -->
-<textarea data-selector="#myModal" class="modal"></button>
+<textarea data-selector="#myModal" class="jqFenster"></button>
  
 <!-- the modal body -->
 <div id="myModal" style="display: none">Hello :)</div>
