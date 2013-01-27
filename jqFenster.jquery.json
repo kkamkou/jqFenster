@@ -23,9 +23,7 @@
         }
     ],
     "bugs": "https://github.com/kkamkou/jqFenster/issues",
-    "homepage": "https://github.com/kkamkou/jqFenster",
-    "docs": "http://kkamkou.github.com/jqFenster",
-    "download": "https://github.com/kkamkou/jqFenster/archive/master.zip",
+    "demo": "http://kkamkou.github.com/jqFenster",
     "dependencies": {
         "jquery": ">=1.5"
     }
