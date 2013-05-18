@@ -1,13 +1,13 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2 (2013-01-25)
+ * Version: 1.2.4 (2013-05-18)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
 
 
 /*
- * File: jquery.fenster.js
+ * File: src/jquery.fenster.js
  */
 
 /**
@@ -188,7 +188,7 @@
 
 
 /*
- * File: jquery.fenster-helper.js
+ * File: src/jquery.fenster-helper.js
  */
 
 /**
@@ -528,7 +528,7 @@
 
 
 /*
- * File: jquery.fenster-helper-template-table.js
+ * File: src/jquery.fenster-helper-template-table.js
  */
 
 /**

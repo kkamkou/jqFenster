@@ -1,10 +1,10 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2 (2013-01-25)
+ * Version: 1.2.4 (2013-05-18)
  * https://github.com/kkamkou/jqFenster
  */
 
-/* File: jquery.fenster.css */
+/* File: src/jquery.fenster.css */
 /* table template engine */
 div.jqFensterHolder { position: fixed; left: 0; top: 0; right: 0; bottom: 0; overflow: auto; margin: 0; padding: 0; border: 0; border-collapse: collapse; }
 *:first-child+html div.jqFensterHolder { height: 100%; }
