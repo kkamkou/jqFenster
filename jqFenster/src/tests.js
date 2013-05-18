@@ -1,36 +1,33 @@
-test('DOM Init', function() {
-  expect(2);
+QUnit.config.reorder = false;
+
+test('DOM Init', 2, function() {
   equal($('.jqFensterHolder').length, 0, 'DOM does not have jqFensterHolder');
   equal($('.jqEbony').length, 0, 'DOM does not have jqEbony');
 });
 
-test('jQuery Check', function() {
-  expect(2);
+test('jQuery Check', 2, function() {
   deepEqual($.type($.fenster), 'function', 'jQuery has the "$.fenster()" function');
   deepEqual($.type($.fensterFinder), 'function', 'jQuery has the "$.fensterFinder()" function');
 });
 
-test('API Check (jquery.fenster.js)', function() {
-  var $fenster = $('#targetSecond').fenster();
+test('API Check (jquery.fenster.js)', 8, function() {
+  var $fenster = $('#targetSecond').fenster(),
+    fncList = [
+      'open', 'close', 'destroy', 'reInit', 'getAncestor', 'getHolder', 'setHolder', 'setOptions'
+    ];
 
-  expect(7);
-  deepEqual($.type($fenster.open), 'function', '"$fenster.open()" exists');
-  deepEqual($.type($fenster.close), 'function', '"$fenster.close()" exists');
-  deepEqual($.type($fenster.reInit), 'function', '"$fenster.reInit()" exists');
-  deepEqual($.type($fenster.getAncestor), 'function', '"$fenster.getAncestor()" exists');
-  deepEqual($.type($fenster.getHolder), 'function', '"$fenster.getHolder()" exists');
-  deepEqual($.type($fenster.setHolder), 'function', '"$fenster.setHolder()" exists');
-  deepEqual($.type($fenster.setOptions), 'function', '"$fenster.setOptions()" exists');
+  fncList.forEach(function (name) {
+    deepEqual($.type($fenster[name]), 'function', '"$fenster.' + name + '()" exists');
+  });
 });
 
-var $fenster = $('#targetSecond').fenster();
+module('In-DOM instance');
+asyncTest('open()', 3, function() {
+  var $fenster = $('#targetSecond').fenster().open();
 
-asyncTest('open()', function() {
-  $fenster.open().open();
   setTimeout(function () {
     var $target = $('.jqFensterHolder');
 
-    expect(3);
     equal($target.length, 1, 'DOM has the "jqFensterHolder" element');
     equal($target.data('jqFensterAncestor').length, 1, 'Holder has the "jqFensterAncestor" data');
     deepEqual($fenster.getAncestor().get(0), $('#targetSecond').get(0), 'Elements are identical');
@@ -39,12 +36,41 @@ asyncTest('open()', function() {
   }, 200);
 });
 
-asyncTest('close()', function() {
-  var $element = $fenster.getAncestor();
+asyncTest('close()', 3, function() {
+  $.fensterFinder($('.jqFensterHolder')).close();
 
-  $fenster.close().close();
   setTimeout(function () {
-    equal($('.jqFensterHolder').length, 0, '"close()": DOM does not have the "jqFensterHolder" element');
+    var $elem = $('#targetSecond');
+
+    equal($('.jqFensterHolder').length, 0, 'DOM does not have the "jqFensterHolder" element');
+    deepEqual($.type($elem.data('jqFensterLocked')), 'undefined', 'No jqFensterLocked in data');
+    deepEqual($.type($elem.data('jqFensterHolder')), 'undefined', 'No jqFensterHolder in data');
     start();
   }, 200);
 });
+
+module('Dynamic instance');
+asyncTest('open()', 2, function() {
+  var countBefore = $('body a.jqFenster:hidden').length;
+
+  $.fenster({'href': 'remote.html'}).open();
+
+  setTimeout(function () {
+    equal(countBefore + 1, $('body a.jqFenster:hidden').length, 'Empty link added to the body');
+    equal($('.jqFensterHolder').length, 1, 'DOM has the "jqFensterHolder" element');
+    start();
+  }, 200);
+});
+
+asyncTest('close()', 2, function() {
+  var countBefore = $('body a.jqFenster:hidden').length;
+
+  $.fensterFinder($('.jqFensterHolder')).close().destroy();
+
+  setTimeout(function () {
+    equal($('.jqFensterHolder').length, 0, 'DOM does not have the "jqFensterHolder" element');
+    equal(countBefore - 1, $('body a.jqFenster:hidden').length, 'Empty link removed from the body');
+    start();
+  }, 200);
+});
+
