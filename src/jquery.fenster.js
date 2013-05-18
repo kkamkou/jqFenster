@@ -64,7 +64,7 @@
 
     // DOM cleanup (removes <a> at the end of body)
     destroy: function () {
-      if (this.options._destroyable) {
+      if (this.element.data('jqFensterDestroyable')) {
         this.element.remove();
       }
     },
@@ -156,7 +156,9 @@
 
     // quick helper
     fenster: function (options) {
-      var $elem = $('<a />', {css: {display: 'none'}});
+      // notice api that we should remove this element after execution
+      var $elem = $('<a />', {css: {display: 'none'}})
+        .data('jqFensterDestroyable', true);
 
       // DOM update
       $('body').append($elem);
@@ -165,9 +167,6 @@
       if ($.type(options) === 'string') {
         options = {'selector': options};
       }
-
-      // notice api that we should remove this element after execution
-      options = $.extend({_destroyable: true}, options || {});
 
       // new instance
       return $elem.fenster(options);
