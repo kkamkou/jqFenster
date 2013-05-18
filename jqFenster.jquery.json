@@ -4,6 +4,7 @@
     "description": "Lightweight Modal Framework with API",
     "keywords": [
         "lightweight",
+        "lightbox",
         "ui",
         "modal",
         "popup",
@@ -23,7 +24,7 @@
         }
     ],
     "bugs": "https://github.com/kkamkou/jqFenster/issues",
-    "demo": "http://kkamkou.github.com/jqFenster",
+    "demo": "http://kkamkou.github.io/jqFenster/",
     "dependencies": {
         "jquery": ">=1.5"
     }
