@@ -9,8 +9,6 @@
  */
 
 /**
- * v1.1
- *
  * Depends:
  *  jquery.ebony.js (optional)
  *
@@ -32,6 +30,8 @@
  *  (a|input|...) class="jqFensterClose"
  */
 
+
+/*jslint browser: true, nomen: true, vars: true, indent: 2 */
 /*jshint jquery: true, browser: true, laxbreak: true */
 (function (doc, win, $) {
   "use strict";
@@ -328,8 +328,15 @@
   };
 
   // DOM listener
-  $('.jqFenster').live('click', function () {
+  var jqFensterCallback = function () {
     (new JqFenster($.jqFensterOptions, $(this))).open();
     return false;
-  });
+  };
+
+  // jQuery compatibility
+  if ($.isFunction($.fn.live)) {
+    $('.jqFenster').live('click', jqFensterCallback);
+  } else {
+    $(doc).on('click', '.jqFenster', jqFensterCallback);
+  }
 }(document, window, jQuery));
