@@ -1,3 +1,6 @@
+QUnit.config.reorder = false;
+QUnit.config.altertitle = false;
+
 test('DOM Init', 2, function() {
   equal($('.jqFensterHolder').length, 0, 'DOM does not have jqFensterHolder');
   equal($('.jqEbony').length, 0, 'DOM does not have jqEbony');
