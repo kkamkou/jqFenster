@@ -1,4 +1,5 @@
 // required:
+//  npm install jake
 //  npm install uglify-js@1
 //  npm install csso
 
@@ -19,21 +20,21 @@ var fs   = require('fs'),
 
 // defaults
 var files = {
-    'jquery.fenster.full.js': [
-      'src/jquery.fenster.js',
-      'src/jquery.fenster-helper.js',
-      'src/jquery.fenster-helper-template-table.js',
-      'jqEbony/jquery.ebony.js'
-    ],
-    'jquery.fenster.full.css': [
-      'src/jquery.fenster.css',
-      'jqEbony/fix-ie.css',
-      'jqEbony/fix-ipad.css'
-    ]
-  };
+  'jquery.fenster.full.js': [
+    'src/jquery.fenster.js',
+    'src/jquery.fenster-helper.js',
+    'src/jquery.fenster-helper-template-table.js',
+    'jqEbony/jquery.ebony.js'
+  ],
+  'jquery.fenster.full.css': [
+    'src/jquery.fenster.css',
+    'jqEbony/fix-ie.css',
+    'jqEbony/fix-ipad.css'
+  ]
+};
 
 function getComment () {
-  var version = '1.2.4',
+  var version = '1.2.5',
     date = new Date(),
     buildDate = date.getFullYear() + '-' +
       (date.getMonth() >= 9 ? '' : '0') + (date.getMonth() + 1) + '-' +
