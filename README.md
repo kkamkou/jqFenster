@@ -4,7 +4,7 @@ Lightweight Modal Framework
 > [more examples and demo](http://kkamkou.github.com/jqFenster/)
 
 ## HTML injection
-Just add the **class="jqFenster"** to element
+Just add the **class="jqFenster"** to an element
 ```html
 <!-- anchor -->
 <a href="#" class="jqFenster" data-selector="#myModal">open</a>
@@ -24,3 +24,28 @@ Just add the **class="jqFenster"** to element
 <!-- the modal body -->
 <div id="myModal" style="display: none">Hello :)</div>
 ```
+### Inline configuration
+```
+jQuery.jqFensterOptions.animationSpeed = 0; // global
+
+(a href="/hello/world/"|input|...) class="jqFenster"
+  data-href="/hello/world"
+  data-selector="#myDiv"
+  data-options='{animationSpeed: 200, noOverlay: true, callbackOpen: "myOpen", callbackClose: "myClose"}'
+```
+
+### API
+```
+Links selectors (if we have information about link only)
+  jQuery('#myElement').fenster().open();
+  jQuery('#myElement').fenster().close();
+  jQuery('#myElement').fenster({'href': 'newUri'}).reInit();
+ 
+Owners (working in the opened popup)
+  jQuery.fensterFinder(this).setOptions({'href': 'newUri'}).reInit();
+ 
+ Anonymous (creates popup on the fly)
+  var modal = jQuery.fenster({'href': '/my/page/'}).open(); // or jQuery.fenster('#myPopup').open();
+  modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
+
+ ```
