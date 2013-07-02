@@ -1,8 +1,6 @@
 Lightweight Modal Framework
 =============
 
-> [nodejs component located here](https://github.com/kkamkou/jqFenster/tree/nodejs)
-
 > [more examples and demo](http://kkamkou.github.com/jqFenster/)
 
 ## HTML injection
@@ -22,7 +20,7 @@ Just add the **class="jqFenster"** to element
 
 <!-- and etc... -->
 <textarea data-selector="#myModal" class="jqFenster"></button>
- 
+
 <!-- the modal body -->
 <div id="myModal" style="display: none">Hello :)</div>
 ```
