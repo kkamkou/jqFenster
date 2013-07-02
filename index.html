@@ -217,7 +217,8 @@ $('#reinitAnother').bind('click', function () {
             </table>
 
             <hr/>
-            <h3>Tests (<a href="http://qunitjs.com/">QUnit</a>)</h3>
+
+            <h3>Tests (<a href="http://qunitjs.com/">QUnit</a>) <button id="runTests">Run</button></h3>
 
             <div id="qunit"></div>
             <div id="qunit-fixture"></div>
@@ -287,10 +288,13 @@ $('#reinitAnother').bind('click', function () {
                     $.fenster({'href': 'remote-reinit.html'}).open();
                     return false;
                 });
+
+                $('#runTests').bind('click', function () {
+                    $.getScript("jqFenster/src/tests.js");
+                    $(this).remove();
+                    return false;
+                });
             });
         </script>
-
-        <!-- Unit tests -->
-        <script type="text/javascript" src="jqFenster/src/tests.js"></script>
     </body>
 </html>
