@@ -1,7 +1,9 @@
 Lightweight Modal Framework
 =============
 
-> [more examples and demo](http://kkamkou.github.com/jqFenster/)
+Powerful pop-up engine, that supports modal nesting and API. If you need a simple "show me the image", use Colorbox. If you need an image gallery, use the Pikachoose.
+
+> [Examples and demo](http://kkamkou.github.com/jqFenster/)
 
 ## HTML injection
 Just add the **class="jqFenster"** to an element
@@ -37,8 +39,7 @@ jQuery.jqFensterOptions.animationSpeed = 0; // global
 ### API
 ```
 Links selectors (if we have information about link only)
-  jQuery('#myElement').fenster().open();
-  jQuery('#myElement').fenster().close();
+  jQuery('#myElement').fenster().open().close();
   jQuery('#myElement').fenster({'href': 'newUri'}).reInit();
  
 Owners (working in the opened popup)
