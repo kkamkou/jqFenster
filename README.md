@@ -41,12 +41,14 @@ jQuery.jqFensterOptions.animationSpeed = 0; // global
 Links selectors (if we have information about link only)
   jQuery('#myElement').fenster().open().close();
   jQuery('#myElement').fenster({'href': 'newUri'}).reInit();
- 
+
 Owners (working in the opened popup)
   jQuery.fensterFinder(this).setOptions({'href': 'newUri'}).reInit();
- 
+
  Anonymous (creates popup on the fly)
   var modal = jQuery.fenster({'href': '/my/page/'}).open(); // or jQuery.fenster('#myPopup').open();
   modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
 
  ```
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kkamkou/jqfenster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
