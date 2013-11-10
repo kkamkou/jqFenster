@@ -33,6 +33,7 @@
     'href': null,
     'selector': null,
     'options': null,
+    'delayOpen': 200,
     'callbackOpen': $.noop,
     'callbackClose': $.noop
   };
@@ -78,12 +79,27 @@
       }
     },
 
-    open: function () {
-      if (!this.getHolder()) {
-        this.setHolder(this.element.trigger('click').data('jqFensterHolder'));
+    open: function (cb) {
+      var cbToExecute = function () {
+        this.options.callbackOpen.call(null, this.getHolder());
+        if ($.type(cb) === 'function') {
+          cb.call(this);
+        }
+        return this;
+      };
+
+      // we have the holder here
+      if (this.getHolder()) {
+        return cbToExecute.call(this);
       }
 
-      this.options.callbackOpen.call(null, this.getHolder());
+      // and now we have to click and wait for the holder
+      this.element.trigger('click');
+      setTimeout(function () {
+        this.setHolder(this.element.data('jqFensterHolder'));
+        cbToExecute.call(this);
+      }.bind(this), this.options.delayOpen);
+
       return this;
     },
 
