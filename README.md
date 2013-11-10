@@ -28,7 +28,7 @@ Just add the **class="jqFenster"** to an element
 ```
 ### Inline configuration
 ```
-jQuery.jqFensterOptions.animationSpeed = 0; // global
+$.jqFensterOptions.animationSpeed = 0; // global
 
 (a href="/hello/world/"|input|...) class="jqFenster"
   data-href="/hello/world"
@@ -38,17 +38,27 @@ jQuery.jqFensterOptions.animationSpeed = 0; // global
 
 ### API
 ```
-Links selectors (if we have information about link only)
-  jQuery('#myElement').fenster().open().close();
-  jQuery('#myElement').fenster({'href': 'newUri'}).reInit();
+Links selectors (if we have information about the link only)
+  $('#myElement').fenster().open().close();
+  $('#myElement').fenster({href: 'newUri'}).reInit();
 
 Owners (working in the opened popup)
-  jQuery.fensterFinder(this).setOptions({'href': 'newUri'}).reInit();
+  $.fensterFinder(this).setOptions({href: 'newUri'}).reInit();
 
- Anonymous (creates popup on the fly)
-  var modal = jQuery.fenster({'href': '/my/page/'}).open(); // or jQuery.fenster('#myPopup').open();
+Anonymous (creates popup on the fly):
+  var cbOpen = function (elem) {};
+  var cbClose = function (elem) {};
+  var modal = $.fenster({href: '/my/page/', callbackClose: cbClose, callbackClose: cbClose}).open(); // or $.fenster('#myPopup').open();
   modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
 
- ```
+Global events:
+  jqFensterClose, jqFensterCallbackClose, jqFensterCallbackOpen
+```
+
+### Build
+```
+> npm install jake uglify-js@1 csso
+> node_modules/.bin/jake build
+```
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kkamkou/jqfenster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

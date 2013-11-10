@@ -29,7 +29,13 @@
   "use strict";
 
   // default options
-  var defaultOptions = {'href': null, 'selector': null, 'options': null};
+  var defaultOptions = {
+    'href': null,
+    'selector': null,
+    'options': null,
+    'callbackOpen': $.noop,
+    'callbackClose': $.noop
+  };
 
   // the main object
   var JqFensterApi = function ($elem, options) {
@@ -55,10 +61,13 @@
   // overloaded functions
   JqFensterApi.prototype = {
     close: function () {
-      if (this.getHolder()) {
-        this.getHolder().trigger('jqFensterClose');
-        this.setHolder(null);
+      if (!this.getHolder()) {
+        return this;
       }
+
+      this.options.callbackClose.call(null, this.getHolder());
+      this.getHolder().trigger('jqFensterClose');
+      this.setHolder(null);
       return this;
     },
 
@@ -73,6 +82,8 @@
       if (!this.getHolder()) {
         this.setHolder(this.element.trigger('click').data('jqFensterHolder'));
       }
+
+      this.options.callbackOpen.call(null, this.getHolder());
       return this;
     },
 
