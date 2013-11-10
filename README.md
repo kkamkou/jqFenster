@@ -52,7 +52,22 @@ Anonymous (creates popup on the fly):
   modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
 
 Global events:
-  jqFensterClose, jqFensterCallbackClose, jqFensterCallbackOpen
+  jqFensterClose - css .jqFensterClose triggered
+  jqFensterCallbackClose, jqFensterCallbackOpen - global events
+```
+
+#### Example
+```javascript
+var $fenster = $.fenster({href: '/test.html', options: {animationSpeed: 500}})
+  .open(function () {
+    this.getHolder().bind('jqFensterCallbackOpen', function () {
+      console.log('open');
+    }).bind('jqFensterCallbackClose', function () {
+      console.log('closed');
+    });
+  });
+
+setTimeout(function() {$fenster.close();}, 5000);
 ```
 
 ### Build
