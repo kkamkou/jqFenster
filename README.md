@@ -48,7 +48,7 @@ Owners (working in the opened popup)
 Anonymous (creates popup on the fly):
   var cbOpen = function (elem) {};
   var cbClose = function (elem) {};
-  var modal = $.fenster({href: '/my/page/', callbackClose: cbClose, callbackClose: cbClose}).open(); // or $.fenster('#myPopup').open();
+  var modal = $.fenster({href: '/my/page/', callbackOpen: cbOpen, callbackClose: cbClose}).open(); // or $.fenster('#myPopup').open();
   modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
 
 Global events:
@@ -57,8 +57,8 @@ Global events:
 
 ### Build
 ```
-> npm install jake uglify-js@1 csso
-> node_modules/.bin/jake build
+npm install jake uglify-js@1 csso
+node_modules/.bin/jake build
 ```
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kkamkou/jqfenster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
