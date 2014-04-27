@@ -21,7 +21,7 @@ Just add the **class="jqFenster"** to an element
 <button data-selector="#myModal" class="jqFenster"></button>
 
 <!-- and etc... -->
-<textarea data-selector="#myModal" class="jqFenster"></button>
+<textarea data-selector="#myModal" class="jqFenster"></textarea>
 
 <!-- the modal body -->
 <div id="myModal" style="display: none">Hello :)</div>
@@ -75,5 +75,3 @@ setTimeout(function() {$fenster.close();}, 5000);
 npm install jake uglify-js@1 csso
 node_modules/.bin/jake build
 ```
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kkamkou/jqfenster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
