@@ -1,3 +1,6 @@
 [submodule "jqFenster/production"]
 	path = jqFenster/production
 	url = https://github.com/kkamkou/jqFenster.git
+[submodule "jqEbony"]
+	path = jqEbony
+	url = https://github.com/kkamkou/jqEbony.git
