@@ -62,6 +62,6 @@ asyncTest('open()/close()', 4, function() {
       equal($('body a.jqFenster:hidden').length, 1, 'Empty link removed from the body');
 
       start();
-    }, 200);
+    }, 400);
   }, 200);
 });
