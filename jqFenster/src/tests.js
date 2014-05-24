@@ -1,6 +1,8 @@
 QUnit.config.reorder = false;
 QUnit.config.altertitle = false;
 
+var animationDelay = 300;
+
 test('DOM Init', 2, function() {
   equal($('.jqFensterHolder').length, 0, 'DOM does not have jqFensterHolder');
   equal($('.jqEbony').length, 0, 'DOM does not have jqEbony');
@@ -43,8 +45,8 @@ asyncTest('open()/close()', 6, function() {
       deepEqual($.type($elem.data('jqFensterHolder')), 'undefined', 'No jqFensterHolder in data');
 
       start();
-    }, 200);
-  }, 200);
+    }, animationDelay);
+  }, animationDelay);
 });
 
 module('Dynamic instance');
@@ -62,6 +64,6 @@ asyncTest('open()/close()', 4, function() {
       equal($('body a.jqFenster:hidden').length, 1, 'Empty link removed from the body');
 
       start();
-    }, 400);
-  }, 200);
+    }, animationDelay);
+  }, animationDelay);
 });
