@@ -1,0 +1,3 @@
+[submodule "jqFenster/production"]
+	path = jqFenster/production
+	url = https://github.com/kkamkou/jqFenster.git
