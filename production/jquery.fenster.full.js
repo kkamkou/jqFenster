@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2.6 (2013-11-10)
+ * Version: 1.2.7 (2014-05-24)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -631,7 +631,7 @@
  */
 
 /**
- * v1.0
+ * v1.1
  *
  * Creates black area for the DOM element
  *
@@ -736,13 +736,13 @@
       var that = this;
 
       // we should display all we have so far
-      this.getElement().parent().fadeIn(
+      this.getElement().hide().parent().fadeIn(
         this.getOptions().animationSpeed,
         function () {
           that.getElement()
             .css('z-index', that.getIndexZ())
             .fadeIn(
-              that.getOptions().animationSpeed,
+              parseInt(that.getOptions().animationSpeed / 2, 10),
               function () {
                 if (typeof (that.getOptions().callbackOpen) === 'function') {
                   that.getOptions().callbackOpen.call(that);
