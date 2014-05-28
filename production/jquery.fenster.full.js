@@ -453,6 +453,7 @@
         if ($.type(that.getOverlay()) === 'object') {
           that.getOverlay().close();
           that.setOverlay(null);
+          return that;
         }
         return that.close();
       });
@@ -470,7 +471,7 @@
       $element.data('jqFensterHolder', $holder);
 
       // overlay with the popup or standalone popup
-      if (this.options.noOverlay || $.type($.fn.jqEbony) === undefined) {
+      if (this.options.noOverlay || $.type($.fn.jqEbony) === 'undefined') {
         $holder.fadeIn(this.options.animationSpeed, function () {
           $holder.trigger('jqFensterCallbackOpen');
         });
@@ -506,9 +507,9 @@
         $holder = this.getHolder(),
         that = this;
 
-      // callback for the pre-close event
+      // pre-close callback
       if ($.isFunction(this.options.callbackCloseBefore)) {
-        this.options.callbackCloseBefore.call(this);
+        this.options.callbackCloseBefore($element);
       }
 
       // removing current window
