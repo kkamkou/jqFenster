@@ -17,7 +17,6 @@
  *  noOverlay           false  Disables ygOverlay usage
  *  callbackOpen        none   Called after a window was opened
  *  callbackClose       none   Called after a window was closed
- *  callbackCloseBefore none   Called before a window close
  *
  * @example:
  *  jQuery.jqFensterOptions.animationSpeed = 0; // global
@@ -43,7 +42,6 @@
     'animationSpeed': 0, // in ms, for example: 200, 400 or 800
     'callbackOpen': null,
     'callbackClose': null,
-    'callbackCloseBefore': null,
     'template': null
   };
 
@@ -77,7 +75,6 @@
     this.options = $.extend({}, options);
     this.element = $element;
     this.holder = null;
-    this.jqEbonySupported = ($.type($.fn.jqEbony) === 'function');
 
     // constructor
     this._init = function () {
@@ -254,7 +251,7 @@
       $element.data('jqFensterHolder', $holder);
 
       // overlay with the popup or standalone popup
-      if (this.options.noOverlay || !this.jqEbonySupported) {
+      if (this.options.noOverlay || !$.isFunction($.fn.jqEbony)) {
         $holder.hide().fadeIn(this.options.animationSpeed, function () {
           $holder.trigger('jqFensterCallbackOpen');
         });
@@ -267,7 +264,7 @@
           'clickCloseArea': $injected,
           'animationSpeed': this.options.animationSpeed,
           'callbackClose': function () {
-            return that.close.apply(
+            return that.close.call(
               $.data(this.getElement().get(0), 'jqFenster')
             );
           },
@@ -287,11 +284,6 @@
     close: function () {
       // defaults
       var $element = this.getElement();
-
-      // pre-close callback
-      if ($.isFunction(this.options.callbackCloseBefore)) {
-        this.options.callbackCloseBefore($element);
-      }
 
       // defaults for the close process
       var $holder = this.getHolder(),
@@ -316,9 +308,9 @@
         };
 
       // jqEbony is used, just hidding the window
-      if (this.jqEbonySupported && !this.getOverlay()) {
-        $holder.hide(0, cb);
-        return this;
+      if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
+        $holder.hide();
+        return cb();
       }
 
       // using an animation to close the window
