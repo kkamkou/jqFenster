@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2.7 (2014-05-24)
+ * Version: 1.2.8 (2014-05-28)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -232,10 +232,11 @@
  *  jquery.ebony.js (optional)
  *
  * Default options:
- *  animationSpeed  400    Sets animation speed for a window
- *  noOverlay       false  Disables ygOverlay usage
- *  callbackOpen    none   Called after a window was created
- *  callbackClose   none   Called after a window was closed
+ *  animationSpeed      0      Sets animation speed for a window
+ *  noOverlay           false  Disables ygOverlay usage
+ *  callbackOpen        none   Called after a window was opened
+ *  callbackClose       none   Called after a window was closed
+ *  callbackCloseBefore none   Called before a window close
  *
  * @example:
  *  jQuery.jqFensterOptions.animationSpeed = 0; // global
@@ -260,6 +261,7 @@
     'animationSpeed': 0, // in ms, for example: 200, 400 or 800
     'callbackOpen': null,
     'callbackClose': null,
+    'callbackCloseBefore': null,
     'template': null
   };
 
@@ -451,6 +453,7 @@
         if ($.type(that.getOverlay()) === 'object') {
           that.getOverlay().close();
           that.setOverlay(null);
+          return that;
         }
         return that.close();
       });
@@ -468,7 +471,7 @@
       $element.data('jqFensterHolder', $holder);
 
       // overlay with the popup or standalone popup
-      if (this.options.noOverlay || $.type($.fn.jqEbony) === undefined) {
+      if (this.options.noOverlay || $.type($.fn.jqEbony) === 'undefined') {
         $holder.fadeIn(this.options.animationSpeed, function () {
           $holder.trigger('jqFensterCallbackOpen');
         });
@@ -503,6 +506,11 @@
       var $element = this.getElement(),
         $holder = this.getHolder(),
         that = this;
+
+      // pre-close callback
+      if ($.isFunction(this.options.callbackCloseBefore)) {
+        this.options.callbackCloseBefore($element);
+      }
 
       // removing current window
       $holder.fadeOut(
