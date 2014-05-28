@@ -236,7 +236,6 @@
  *  noOverlay           false  Disables ygOverlay usage
  *  callbackOpen        none   Called after a window was opened
  *  callbackClose       none   Called after a window was closed
- *  callbackCloseBefore none   Called before a window close
  *
  * @example:
  *  jQuery.jqFensterOptions.animationSpeed = 0; // global
@@ -261,7 +260,6 @@
     'animationSpeed': 0, // in ms, for example: 200, 400 or 800
     'callbackOpen': null,
     'callbackClose': null,
-    'callbackCloseBefore': null,
     'template': null
   };
 
@@ -471,8 +469,8 @@
       $element.data('jqFensterHolder', $holder);
 
       // overlay with the popup or standalone popup
-      if (this.options.noOverlay || $.type($.fn.jqEbony) === 'undefined') {
-        $holder.fadeIn(this.options.animationSpeed, function () {
+      if (this.options.noOverlay || !$.isFunction($.fn.jqEbony)) {
+        $holder.hide().fadeIn(this.options.animationSpeed, function () {
           $holder.trigger('jqFensterCallbackOpen');
         });
         return false;
@@ -484,7 +482,7 @@
           'clickCloseArea': $injected,
           'animationSpeed': this.options.animationSpeed,
           'callbackClose': function () {
-            return that.close.apply(
+            return that.close.call(
               $.data(this.getElement().get(0), 'jqFenster')
             );
           },
@@ -503,19 +501,12 @@
     // closes popup
     close: function () {
       // defaults
-      var $element = this.getElement(),
-        $holder = this.getHolder(),
-        that = this;
+      var $element = this.getElement();
 
-      // pre-close callback
-      if ($.isFunction(this.options.callbackCloseBefore)) {
-        this.options.callbackCloseBefore($element);
-      }
-
-      // removing current window
-      $holder.fadeOut(
-        that.getOverlay() ? 0 : that.options.animationSpeed,
-        function () {
+      // defaults for the close process
+      var $holder = this.getHolder(),
+        that = this,
+        cb = function () {
           // calling default callback
           $holder.trigger('jqFensterCallbackClose');
 
@@ -530,8 +521,18 @@
           // data and marker cleanup, unlocking the current object
           $element.removeData('jqFensterLocked')
             .removeData('jqFensterHolder');
-        }
-      );
+
+          return that;
+        };
+
+      // jqEbony is used, just hidding the window
+      if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
+        $holder.hide();
+        return cb();
+      }
+
+      // using an animation to close the window
+      $holder.fadeOut(this.getOverlay() ? 0 : this.options.animationSpeed, cb);
 
       return this;
     },
@@ -639,7 +640,7 @@
  */
 
 /**
- * v1.1
+ * v1.2
  *
  * Creates black area for the DOM element
  *
@@ -649,6 +650,7 @@
  *      'opacity': 0.5,
  *      'zIndex': 99999,
  *      'callbackClose': null,
+ *      'callbackCloseBefore': null,
  *      'callbackOpen': null,
  *      'escapeCloses': true,
  *      'clickCloses': true,
@@ -666,6 +668,7 @@
     'clickCloses': true,
     'clickCloseArea': null,
     'callbackClose': null,
+    'callbackCloseBefore': null,
     'callbackOpen': null,
     'animationSpeed': 0, // in ms, for example: 200, 400 or 800
     'color': [0, 0, 0]
@@ -689,8 +692,7 @@
     // returns z-index value
     getIndexZ: function () {
       return parseInt(
-        $('body').data('jqEbony') || this.getOptions().zIndex,
-        10
+        $('body').data('jqEbony') || this.getOptions().zIndex, 10
       );
     },
 
@@ -752,7 +754,7 @@
             .fadeIn(
               parseInt(that.getOptions().animationSpeed / 2, 10),
               function () {
-                if (typeof (that.getOptions().callbackOpen) === 'function') {
+                if ($.isFunction(that.getOptions().callbackOpen)) {
                   that.getOptions().callbackOpen.call(that);
                 }
               }
@@ -769,14 +771,21 @@
         return this;
       }
 
-      var that = this;
+      // defaults
+      var that = this,
+        $element = this.getElement();
+
+      // pre-close callback
+      if ($.isFunction(this.getOptions().callbackCloseBefore)) {
+        this.getOptions().callbackCloseBefore($element);
+      }
 
       // overlay close
-      this.getElement().parent().fadeOut(
+      $element.parent().fadeOut(
         this.getOptions().animationSpeed,
         function () {
           // DOM cleanup
-          that.getElement().unwrap();
+          $element.unwrap();
 
           // design revert
           that._revert();
@@ -785,7 +794,7 @@
           that.setLayout(null);
 
           // before close function
-          if (typeof (that.getOptions().callbackClose) === 'function') {
+          if ($.isFunction(that.getOptions().callbackClose)) {
             that.getOptions().callbackClose.call(that);
           }
         }
