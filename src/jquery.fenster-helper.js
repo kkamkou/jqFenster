@@ -77,6 +77,7 @@
     this.options = $.extend({}, options);
     this.element = $element;
     this.holder = null;
+    this.jqEbonySupported = ($.type($.fn.jqEbony) === 'function');
 
     // constructor
     this._init = function () {
@@ -253,8 +254,8 @@
       $element.data('jqFensterHolder', $holder);
 
       // overlay with the popup or standalone popup
-      if (this.options.noOverlay || $.type($.fn.jqEbony) === 'undefined') {
-        $holder.fadeIn(this.options.animationSpeed, function () {
+      if (this.options.noOverlay || !this.jqEbonySupported) {
+        $holder.hide().fadeIn(this.options.animationSpeed, function () {
           $holder.trigger('jqFensterCallbackOpen');
         });
         return false;
@@ -285,19 +286,17 @@
     // closes popup
     close: function () {
       // defaults
-      var $element = this.getElement(),
-        $holder = this.getHolder(),
-        that = this;
+      var $element = this.getElement();
 
       // pre-close callback
       if ($.isFunction(this.options.callbackCloseBefore)) {
         this.options.callbackCloseBefore($element);
       }
 
-      // removing current window
-      $holder.fadeOut(
-        that.getOverlay() ? 0 : that.options.animationSpeed,
-        function () {
+      // defaults for the close process
+      var $holder = this.getHolder(),
+        that = this,
+        cb = function () {
           // calling default callback
           $holder.trigger('jqFensterCallbackClose');
 
@@ -312,8 +311,18 @@
           // data and marker cleanup, unlocking the current object
           $element.removeData('jqFensterLocked')
             .removeData('jqFensterHolder');
-        }
-      );
+
+          return that;
+        };
+
+      // jqEbony is used, just hidding the window
+      if (this.jqEbonySupported && !this.getOverlay()) {
+        $holder.hide(0, cb);
+        return this;
+      }
+
+      // using an animation to close the window
+      $holder.fadeOut(this.getOverlay() ? 0 : this.options.animationSpeed, cb);
 
       return this;
     },
