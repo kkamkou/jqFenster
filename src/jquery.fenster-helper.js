@@ -13,10 +13,11 @@
  *  jquery.ebony.js (optional)
  *
  * Default options:
- *  animationSpeed  400    Sets animation speed for a window
- *  noOverlay       false  Disables ygOverlay usage
- *  callbackOpen    none   Called after a window was created
- *  callbackClose   none   Called after a window was closed
+ *  animationSpeed      0      Sets animation speed for a window
+ *  noOverlay           false  Disables ygOverlay usage
+ *  callbackOpen        none   Called after a window was opened
+ *  callbackClose       none   Called after a window was closed
+ *  callbackCloseBefore none   Called before a window close
  *
  * @example:
  *  jQuery.jqFensterOptions.animationSpeed = 0; // global
@@ -42,6 +43,7 @@
     'animationSpeed': 0, // in ms, for example: 200, 400 or 800
     'callbackOpen': null,
     'callbackClose': null,
+    'callbackCloseBefore': null,
     'template': null
   };
 
@@ -285,6 +287,11 @@
       var $element = this.getElement(),
         $holder = this.getHolder(),
         that = this;
+
+      // callback for the pre-close event
+      if ($.isFunction(this.options.callbackCloseBefore)) {
+        this.options.callbackCloseBefore.call(this);
+      }
 
       // removing current window
       $holder.fadeOut(

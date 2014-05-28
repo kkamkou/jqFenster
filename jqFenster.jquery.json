@@ -11,7 +11,7 @@
         "api",
         "window"
     ],
-    "version": "1.2.7",
+    "version": "1.2.8",
     "author": {
         "name": "Kanstantsin Kamkou",
         "email" : "kkamkou@gmail.com",
@@ -19,8 +19,8 @@
     },
     "licenses": [
         {
-            "type": "Boost Software License 1.0",
-            "url": "http://opensource.org/licenses/BSL-1.0"
+            "type": "The MIT License (MIT)",
+            "url": "http://opensource.org/licenses/MIT"
         }
     ],
     "bugs": "https://github.com/kkamkou/jqFenster/issues",
