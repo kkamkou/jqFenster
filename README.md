@@ -26,10 +26,8 @@ Just add the **class="jqFenster"** to an element
 <!-- the modal body -->
 <div id="myModal" style="display: none">Hello :)</div>
 ```
-### Inline configuration
+### HTML configuration
 ```
-$.jqFensterOptions.animationSpeed = 0; // global
-
 (a href="/hello/world/"|input|...) class="jqFenster"
   data-href="/hello/world"
   data-selector="#myDiv"
