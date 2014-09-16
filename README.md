@@ -1,7 +1,9 @@
 Lightweight Modal Framework
 =============
 
-Powerful pop-up engine, that supports modal nesting and API. If you need a simple "show me the image", use Colorbox. If you need an image gallery, use the Pikachoose. Simple alternatives are: fancybox, lightbox  etc.
+Powerful pop-up engine, that supports modal nesting and API.
+
+If you need a simple "show me the image" solution - use Colorbox. If you need an image gallery - use Pikachoose. Simple modal alternatives are: fancybox, lightbox  etc.
 
 > [Examples and demo](http://kkamkou.github.com/jqFenster/)
 
