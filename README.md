@@ -7,6 +7,9 @@ If you need a simple "show me the image" solution - use Colorbox. If you need an
 
 > [Examples and demo](http://kkamkou.github.com/jqFenster/)
 
+## Installation
+Check-out or download the `release-x.x.x` branch.
+
 ## HTML injection
 Just add the **class="jqFenster"** to an element
 ```html
