@@ -13,10 +13,12 @@
  *  jquery.ebony.js (optional)
  *
  * Default options:
- *  animationSpeed      0      Sets animation speed for a window
+ *  animationSpeed      0      Sets animation speed for a window in ms
  *  noOverlay           false  Disables ygOverlay usage
  *  callbackOpen        none   Called after a window was opened
  *  callbackClose       none   Called after a window was closed
+ *  width               true   Disable it if you're resizing the window by yourself
+ *                             or specify the exact value (px, em, etc.)
  *
  * @example:
  *  jQuery.jqFensterOptions.animationSpeed = 0; // global
@@ -24,7 +26,7 @@
  *  (a href="/hello/world/"|input|...) class="jqFenster"
  *      data-href="/hello/world"
  *      data-selector="#myDiv"
- *      data-options='{animationSpeed: 200, noOverlay: true, callbackOpen: "myOpen", callbackClose: "myClose"}'
+ *      data-options='{animationSpeed: 200, noOverlay: true, callbackOpen: "myOpen", callbackClose: "myClose", width: "300px"}'
  *
  * In a popup you can use the close helper
  *  (a|input|...) class="jqFensterClose"
@@ -33,16 +35,18 @@
 
 /*jslint browser: true, nomen: true, vars: true, indent: 2 */
 /*jshint jquery: true, browser: true, laxbreak: true */
+
 (function (doc, win, $) {
   "use strict";
 
   // default set of options
   $.jqFensterOptions = {
-    'noOverlay': false,
-    'animationSpeed': 0, // in ms, for example: 200, 400 or 800
-    'callbackOpen': null,
-    'callbackClose': null,
-    'template': null
+    noOverlay: false,
+    animationSpeed: 0, // in ms, for example: 200, 400 or 800
+    callbackOpen: null,
+    callbackClose: null,
+    template: null,
+    width: true
   };
 
   // default template engine
@@ -51,39 +55,33 @@
     prepare: function () {
       return this.children().hide();
     },
-
     // content modification
     inject: function (content) {
       this.empty().append(content);
     },
-
     // DOM cleanup (ajax used)
     cleanupRemote: function () {
       return this.remove();
     },
-
     // DOM cleanup (selector used)
     cleanupSelector: function () {
       return this.children().hide().unwrap();
     }
   };
 
-  // main class
   var JqFenster = function (options, $element) {
-    // defaults
-    this.overlay = null;
     this.options = $.extend({}, options);
     this.element = $element;
+    this.overlay = null;
     this.holder = null;
 
-    // constructor
     this._init = function () {
       var that = this;
 
       // default holder styles
       this.holder = $('<div/>').addClass('jqFensterHolder');
 
-      // lets store some information
+      // storing own information
       $.data(this.holder.get(0), 'jqFenster', this);
 
       // do we have JSON options?
@@ -130,34 +128,22 @@
     };
   };
 
-  // extending
   JqFenster.prototype = {
-    // returns the holder object
     getHolder: function () {
       return this.holder;
     },
-
-    // returns the element object
     getElement: function () {
       return this.element;
     },
-
-    // returns the overlay object
     getOverlay: function () {
       return this.overlay;
     },
-
-    // shows popup
     open: function () {
-      // locking check
       if (this.isLocked()) {
         return false;
       }
 
-      // constructor
       this._init();
-
-      // locking this element
       this.setLock(true);
 
       // DOM corrections
@@ -176,25 +162,20 @@
         this.options.template.beforeLoad.call(this.getHolder());
       }
 
-      // preload content from the href
+      // preloads content from the href
       $.get((this.getElement().data('href') || this.getElement().attr('href')))
         .done(function (data) {
           // loader remove
           if (that.options.template.afterLoad) {
             that.options.template.afterLoad.call(that.getHolder());
           }
-
-          // modal creation process
           that.create(data);
         });
 
       return this;
     },
-
-    // move window to the center of a screen
     show: function () {
-      // making sure that the inner content is hidden
-      // avoiding browser issues
+      // making sure that the inner content is hidden; avoiding browser issues
       var $elem = this.options.template.prepare.call(this.getHolder());
 
       // cycling to get the element height
@@ -206,25 +187,24 @@
         return this;
       }
 
-      // applying css rules.
-      // only the width, other attributes should be defined manually
-      this.getHolder().children().css('width', $elem.width());
+      // changing the width for centering the element
+      if (this.options.width !== false) {
+        this.getHolder().children().css(
+          'width',
+          this.options.width === true ? $elem.width() : this.options.width
+        );
+      }
 
-      // visibility change
       $elem.show();
 
       return this;
     },
-
-    // content switch and show
     create: function (target) {
-      // defaults
       var that = this,
         $holder = this.getHolder(),
         $element = this.getElement(),
         $injected = this.options.template.inject.call($holder, target);
 
-      // inline area visibility
       this.show();
 
       // the close trigger
@@ -261,32 +241,26 @@
       // overlay enabled
       this.setOverlay(
         $($holder).jqEbony({
-          'clickCloseArea': $injected,
-          'animationSpeed': this.options.animationSpeed,
-          'callbackClose': function () {
+          clickCloseArea: $injected,
+          animationSpeed: this.options.animationSpeed,
+          callbackClose: function () {
             return that.close.call(
               $.data(this.getElement().get(0), 'jqFenster')
             );
           },
-          'callbackOpen': function () {
+          callbackOpen: function () {
             return $holder.trigger('jqFensterCallbackOpen');
           }
         })
       );
 
-      // lets show it
       this.getOverlay().open();
 
       return false;
     },
-
-    // closes popup
     close: function () {
-      // defaults
-      var $element = this.getElement();
-
-      // defaults for the close process
-      var $holder = this.getHolder(),
+      var $element = this.getElement(),
+        $holder = this.getHolder(),
         that = this,
         cb = function () {
           // calling default callback
@@ -318,25 +292,19 @@
 
       return this;
     },
-
-    // checks if the current element is locked or not
     isLocked: function () {
       return this.getElement().data('jqFensterLocked');
     },
-
-    // sets the lock marker
     setLock: function (marker) {
       return this.getElement().data('jqFensterLocked', !!marker);
     },
-
-    // sets the overlay object
     setOverlay: function (overlay) {
       this.overlay = overlay;
       return this;
     }
   };
 
-  // DOM listener
+  // default DOM listener
   var jqFensterCallback = function () {
     (new JqFenster($.jqFensterOptions, $(this))).open();
     return false;
