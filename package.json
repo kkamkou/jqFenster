@@ -1,0 +1,36 @@
+{
+    "name": "jqFenster",
+    "title": "jqFenster",
+    "description": "Lightweight Modal Framework",
+    "keywords": [
+        "framework",
+        "lightbox",
+        "ui",
+        "modal",
+        "popup",
+        "api",
+        "window",
+        "jquery-plugin"
+    ],
+    "version": "1.2.9",
+    "author": {
+        "name": "Kanstantsin Kamkou",
+        "email" : "kkamkou@gmail.com",
+        "url": "http://2ka.by"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/kkamkou/jqFenster/issues"
+    },
+    "engines": {
+        "node": ">=0.8.0"
+    },
+    "homepage": "http://kkamkou.github.io/jqFenster/",
+    "dependencies": {
+        "jquery": ">=1.6"
+    },
+    "repository": {
+        "type" : "git",
+        "url" : "https://github.com/kkamkou/jqFenster.git"
+    }
+}
