@@ -11,7 +11,7 @@
         "api",
         "window"
     ],
-    "version": "1.2.8",
+    "version": "1.2.9",
     "author": {
         "name": "Kanstantsin Kamkou",
         "email" : "kkamkou@gmail.com",
@@ -26,6 +26,6 @@
     "bugs": "https://github.com/kkamkou/jqFenster/issues",
     "demo": "http://kkamkou.github.io/jqFenster/",
     "dependencies": {
-        "jquery": ">=1.5"
+        "jquery": ">=1.6"
     }
 }
