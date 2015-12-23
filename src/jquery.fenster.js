@@ -107,8 +107,10 @@
       this.element.trigger('click');
 
       setTimeout(function () {
-        this.setHolder(this.element.data('jqFensterHolder'));
-        this.getHolder().on('jqFensterCallbackClose', this.close.bind(this));
+        this.setHolder(
+          this.element.data('jqFensterHolder')
+            .on('jqFensterCallbackClose', this.close.bind(this))
+        );
         cbToExecute.call(this);
       }.bind(this), this.options.delayOpen);
 

@@ -80,3 +80,18 @@ asyncTest('Dynamic instance', 10, function() {
     }, animationDelay);
   }, animationDelay);
 });
+
+asyncTest('Issue #12', 1, function() {
+  var modal = $.fenster('#targetSecond').open();
+  setTimeout(function () {
+    $('a.jqFensterClose:visible').click();
+    setTimeout(function () {
+      modal.open();
+      equal(modal.element.data('jqFensterHolder').length, 1);
+      setTimeout(function () {
+        modal.destroy();
+        start();
+      }, animationDelay);
+    }, animationDelay);
+  }, animationDelay);
+});
