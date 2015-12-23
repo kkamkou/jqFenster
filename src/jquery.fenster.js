@@ -80,6 +80,7 @@
       if (!this.isDestroyable()) {
         return false;
       }
+      this.close();
       this.element.remove();
       this.element = null;
       return true;
