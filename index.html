@@ -7,11 +7,11 @@
 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-        <link href='http://fonts.googleapis.com/css?family=Molengo&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection" />
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/print.css" type="text/css" media="print" />
-        <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/github.min.css" media="screen, projection" />
-        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" media="screen, projection" />
+        <link href='//fonts.googleapis.com/css?family=Molengo&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" href="//www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="//www.blueprintcss.org/blueprint/print.css" type="text/css" media="print" />
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/github.min.css" media="screen, projection" />
+        <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.20.0.css" type="text/css" media="screen, projection" />
 
         <!-- jqFenster styles. Optional if default template engine used. -->
         <link rel="stylesheet" href="src/jquery.fenster.css" type="text/css" />
@@ -19,17 +19,18 @@
         <style type="text/css">
             h1, h2, h3{ font-family: "Molengo", "Trebuchet MS", "Tahoma"; }
             body{ background-color: #FFFCE3; font: 14px "Trebuchet MS", "Tahoma"; }
-            div.container{ margin-top: 20px; }
+            div.container{ margin-top: 20px; background-color: #FFF6CA; border: 4px solid #FFEABC; padding: 10px; border-radius: 8px; }
             pre{ margin: 0; }
             div.jqFensterModal{ width: 400px; }
-            hr{ border-bottom: 2px solid #FFFCBD; background-color: #F5F18D; }
+            hr{ border-bottom: 2px solid #FFEABC; background-color: #FFD578; }
+            tbody tr:nth-child(even) td, tbody tr.even td{ background: #FFEABD; border-radius: 4px; }
         </style>
     </head>
 
     <body>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script type="text/javascript" src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.20.0.js"></script>
         <script type="text/javascript">
             $(function() {
                 $('div.code').each(
@@ -129,19 +130,23 @@
                 <tr>
                     <td>
                         2. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation&lt;/a></div>
+<div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}"
+    class="jqFenster">With animation&lt;/a>
+</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         3. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation (appends to the end of this page)</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation&lt;/a></div>
+<div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}"
+    class="jqFenster">Without overlay and animation&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         4. <a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback&lt;/a></div>
+<div class="code">&lt;a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}'
+    class="jqFenster">Callback&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
@@ -196,7 +201,7 @@ $('#targetJsApiFirst').fenster().open();
 $.fenster('#target').open();
 
 // dynamic, just options
-$.fenster({'selector': '#target}).open();</div>
+$.fenster({'selector': '#target'}).open();</div>
                     </td>
                 </tr>
                 <tr>
@@ -207,13 +212,12 @@ $.fenster({'href': 'remote-reinit.html'}).open();
 
 // remote-reinit.html
 $('#reinitAnother').bind('click', function () {
-    $.fensterFinder(this).setOptions({
-        'href': 'remote.html',
-        'options': {
-            callbackOpen: "myOpen",
-            animationSpeed: 300
-        }
-    }).reInit();
+    $.fensterFinder(this)
+        .setOptions({
+            href: 'remote.html',
+            options: {callbackOpen: "myOpen", animationSpeed: 300}
+        })
+        .reInit();
 
     return false;
 });
@@ -245,6 +249,12 @@ $('#reinitAnother').bind('click', function () {
         <div id="targetSecond" class="jqFensterModal">
             <div class="jqFensterModalContent">
                 Hello, I'm the #targetSecond,<br />
+                <form>
+                    <fieldset>
+                        <label for="test-input">Label:</label>
+                        <input type="text" id="test-input" />
+                    </fieldset>
+                </form>
                 <a href="#" class="jqFensterClose">[CloseMe]</a>
             </div>
         </div>
