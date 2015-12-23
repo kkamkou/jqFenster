@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2.9 (2015-05-05)
+ * Version: 1.2.10 (2015-12-23)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -26,13 +26,13 @@
  *
  *  Link selectors (if we have information about link only)
  *      jQuery('.myElement').fenster().open().close();
- *      jQuery('.myElement').fenster({'href': 'newUri'}).reInit();
+ *      jQuery('.myElement').fenster({href: 'newUri'}).reInit();
  *
  *  Owners (working in the opened popup)
- *      jQuery.fensterFinder(this).setOptions({'href': 'newUri'}).reInit();
+ *      jQuery.fensterFinder(this).setOptions({href: 'newUri'}).reInit();
  *
  *  Anonymous (creates popup on the fly)
- *      jQuery.fenster({'href': 'uri'}).open();
+ *      jQuery.fenster({href: 'uri'}).open();
  *      jQuery.fenster('#myPopup').open();
  */
 
@@ -41,12 +41,12 @@
   
   // default options
   var defaultOptions = {
-    'href': null,
-    'selector': null,
-    'options': null,
-    'delayOpen': 200,
-    'callbackOpen': $.noop,
-    'callbackClose': $.noop
+    href: null,
+    selector: null,
+    options: null,
+    delayOpen: 200,
+    callbackOpen: $.noop,
+    callbackClose: $.noop
   };
 
   // the main object
@@ -64,8 +64,7 @@
     }
 
     // dynamic object requires custom init
-    if (!this.element.hasClass('jqFenster')) {
-      this.element.addClass('jqFenster');
+    if (this.isDestroyable()) {
       this._init();
     }
   };
@@ -83,14 +82,26 @@
       return this;
     },
 
+    isDestroyable: function () {
+      return !!(this.element && this.element.data('jqFensterDestroyable'));
+    },
+
     // DOM cleanup (removes <a> at the end of body)
     destroy: function () {
-      if (this.element.data('jqFensterDestroyable')) {
-        this.element.remove();
+      if (!this.isDestroyable()) {
+        return false;
       }
+      this.close();
+      this.element.remove();
+      this.element = null;
+      return true;
     },
 
     open: function (cb) {
+      if (!this.element) {
+        return this;
+      }
+
       var cbToExecute = function () {
         this.options.callbackOpen.call(null, this.getHolder());
         if ($.type(cb) === 'function') {
@@ -99,15 +110,18 @@
         return this;
       };
 
-      // we have the holder here
       if (this.getHolder()) {
         return cbToExecute.call(this);
       }
 
       // and now we have to click and wait for the holder
       this.element.trigger('click');
+
       setTimeout(function () {
-        this.setHolder(this.element.data('jqFensterHolder'));
+        this.setHolder(
+          this.element.data('jqFensterHolder')
+            .on('jqFensterCallbackClose', this.close.bind(this))
+        );
         cbToExecute.call(this);
       }.bind(this), this.options.delayOpen);
 
@@ -148,33 +162,30 @@
     },
 
     _init: function () {
-      // href
       if (this.options.href !== null) {
         this.element.data('href', this.options.href);
       }
-
-      // selector
       if (this.options.selector !== null) {
         this.element.data('selector', this.options.selector);
       }
-
-      // data-options
       if (this.options.options) {
         this.element.data('options', this.options.options);
       }
-
       return this;
     }
   };
 
   // jQuery plugin
   $.fn.fenster = function (options) {
+    if (!this.hasClass('jqFenster')) {
+      return $.fenster(this.selector);
+    }
     return new JqFensterApi(this, options);
   };
 
   // helps to find/creatre the jqFenster object
   $.extend({
-    // working inside opened window
+    // $.fensterFinder(selector|this)
     fensterFinder: function (target) {
       var $target = $(target), $elem;
 
@@ -192,21 +203,18 @@
       return null;
     },
 
-    // quick helper
+    // $.fenster(selector)
     fenster: function (options) {
-      // notice api that we should remove this element after execution
       var $elem = $('<a />', {css: {display: 'none'}})
+        .addClass('jqFenster')
         .data('jqFensterDestroyable', true);
 
-      // DOM update
       $('body').append($elem);
 
-      // quick helper for the jQuery selector
       if ($.type(options) === 'string') {
         options = {'selector': options};
       }
 
-      // new instance
       return $elem.fenster(options);
     }
   });

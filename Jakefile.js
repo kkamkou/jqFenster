@@ -34,7 +34,7 @@ var files = {
 };
 
 function getComment () {
-  var version = '1.2.9',
+  var version = '1.2.10',
     date = new Date(),
     buildDate = date.getFullYear() + '-' +
       (date.getMonth() >= 9 ? '' : '0') + (date.getMonth() + 1) + '-' +
@@ -84,7 +84,7 @@ file(
   function () {
     console.log('optimizing jquery.fenster.css');
 
-    var css_optimized = csso.justDoIt(fs.readFileSync('production/jquery.fenster.full.css').toString())
+    var css_optimized = csso.minify(fs.readFileSync('production/jquery.fenster.full.css').toString())
     fs.writeFileSync(this.name, getComment() + css_optimized);
   }
 );
