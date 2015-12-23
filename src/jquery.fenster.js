@@ -30,12 +30,12 @@
 
   // default options
   var defaultOptions = {
-    'href': null,
-    'selector': null,
-    'options': null,
-    'delayOpen': 200,
-    'callbackOpen': $.noop,
-    'callbackClose': $.noop
+    href: null,
+    selector: null,
+    options: null,
+    delayOpen: 200,
+    callbackOpen: $.noop,
+    callbackClose: $.noop
   };
 
   // the main object
@@ -108,6 +108,7 @@
 
       setTimeout(function () {
         this.setHolder(this.element.data('jqFensterHolder'));
+        this.getHolder().on('jqFensterCallbackClose', this.close.bind(this));
         cbToExecute.call(this);
       }.bind(this), this.options.delayOpen);
 
