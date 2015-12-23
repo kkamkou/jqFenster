@@ -7,29 +7,32 @@
 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-        <link href='http://fonts.googleapis.com/css?family=Molengo&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection" />
-        <link rel="stylesheet" href="http://www.blueprintcss.org/blueprint/print.css" type="text/css" media="print" />
-        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css" media="screen, projection" />
-        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" media="screen, projection" />
+        <link href='//fonts.googleapis.com/css?family=Molengo&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" href="//www.blueprintcss.org/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="//www.blueprintcss.org/blueprint/print.css" type="text/css" media="print" />
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/github.min.css" media="screen, projection" />
+        <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.20.0.css" type="text/css" media="screen, projection" />
 
-        <!-- jqFenster styles. Optional if default template engine used. -->
+        <!-- jqFenster styles. Optional if default template engine is used. -->
         <link rel="stylesheet" href="jqFenster/production/jquery.fenster.css" type="text/css" />
 
         <style type="text/css">
             h1, h2, h3{ font-family: "Molengo", "Trebuchet MS", "Tahoma"; }
             body{ background-color: #FFFCE3; font: 14px "Trebuchet MS", "Tahoma"; }
-            div.container{ margin-top: 20px; }
+            div.container{ margin-top: 20px; background-color: #FFF6CA; border: 4px solid #FFEABC; padding: 10px; border-radius: 8px; }
             pre{ margin: 0; }
             div.jqFensterModal{ width: 400px; }
-            hr{ border-bottom: 2px solid #FFFCBD; background-color: #F5F18D; }
+            hr{ border-bottom: 2px solid #FFEABC; background-color: #FFD578; }
+            tbody tr:nth-child(even) td, tbody tr.even td{ background: #FFEABD; border-radius: 4px; }
+            #versions input.active{ border: 1px solid red; }
         </style>
     </head>
 
     <body>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.16.0.js"></script>
+        <!-- See the bottom of the page! -->
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.20.0.js"></script>
         <script type="text/javascript">
             $(function() {
                 $('div.code').each(
@@ -56,13 +59,7 @@
 
             <h3>jQuery versions supported</h3>
 
-            2.1, 1.11 and
-            <a href="index-2.0.html">2.0</a>,
-            <a href="index-1.10.html">1.10</a>,
-            <a href="index-1.9.html">1.9</a>,
-            <a href="index-1.8.html">1.8</a>,
-            <a href="index-1.7.html">1.7</a>,
-            <a href="index-1.6.html">1.6</a>
+            2.1.4, 2.0.3, 1.11.3, 1.10.2, 1.9.1, 1.8.3, 1.7.2, 1.6.4
 
             <br /><br />
 
@@ -74,7 +71,7 @@
                 <tr>
                     <td>
                         Download
-                        <div class="code">https://github.com/kkamkou/jqFenster/archive/1.2.9.zip</div>
+                        <div class="code">https://github.com/kkamkou/jqFenster/archive/1.2.10.zip</div>
                     </td>
                 </tr>
                 <tr>
@@ -122,18 +119,18 @@
                     <td>
                         jqEbony options
 <div class="code">$.extend($.jqEbonyOptions, {
-    'opacity': 0.7,
-    'zIndex': 99999,
-    'escapeCloses': true, // enable escape button
-    'clickCloses': true, // the left mouse click will close the modal
-    'animationSpeed': 0, // in ms, for example: 200, 400 or 800
-    'color': [0, 0, 0] // rgb, example: 255, 255, 255 is white
+    opacity: 0.7,
+    zIndex: 99999,
+    escapeCloses: true, // enable escape button
+    clickCloses: true, // the left mouse click will close the modal
+    animationSpeed: 0, // in ms, for example: 200, 400 or 800
+    color: [0, 0, 0] // rgb, example: 255, 255, 255 is white
 });</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Advanced example (Adds the close button to opened modal)
+                        Advanced example (adds the close button to opened modal)
 <div class="code">$.extend($.jqFensterOptions, {
     'callbackOpen': function (ref) {
         setTimeout(function () {
@@ -158,26 +155,29 @@
             <table>
                 <tr>
                     <td>
-                        1. <a href="#" data-selector="#target" class="jqFenster">Simple link</a>
+                        1. <a href="#" data-selector="#target" class="jqFenster" id="simplelink">Simple link</a>
                         <div class="code">&lt;a href="#" data-selector="#target" class="jqFenster">Simple link&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         2. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}" class="jqFenster">With animation&lt;/a></div>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 400}"
+    class="jqFenster">With animation&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         3. <a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation (appends to the end of this page)</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}" class="jqFenster">Without overlay and animation&lt;/a></div>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options="{animationSpeed: 0, noOverlay: true}"
+    class="jqFenster">Without overlay and animation&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         4. <a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback</a>
-                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}' class="jqFenster">Callback&lt;/a></div>
+                        <div class="code">&lt;a href="#" data-selector="#targetSecond" data-options='{callbackOpen: "myOpen", callbackClose: "myClose"}'
+    class="jqFenster">Callback&lt;/a></div>
                     </td>
                 </tr>
                 <tr>
@@ -224,33 +224,43 @@
             <table>
                 <tr>
                     <td>
+                        <div class="code">// Each call to the api creates a new hidden "a" tag with "jqFenster" class to store an instance.
+// To remove this tag, you have to call the ".destroy()" method. Also, you can check it with ".isDestroyable()" call.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         1. <button id="api1">open()</button>
                         <div class="code">// static, by jQuery object
-$('#targetJsApiFirst').fenster().open();
+var modal = $('#target').fenster();
 
 // dynamic, by selector
-$.fenster('#target').open();
+var modal =  $.fenster('#target');
 
 // dynamic, just options
-$.fenster({'selector': '#target'}).open();</div>
+var modal = $.fenster({selector: '#target'});
+
+// show the modal
+modal.open();
+
+// cleanup
+modal.destroy() // or modal.close().destroy();</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         2. <button id="api2">reInit()</button>
 <div class="code">// this file
-$.fenster({'href': 'remote-reinit.html'}).open();
+$.fenster({href: 'remote-reinit.html'}).open();
 
 // remote-reinit.html
 $('#reinitAnother').bind('click', function () {
-    $.fensterFinder(this).setOptions({
-        'href': 'remote.html',
-        'options': {
-            callbackOpen: "myOpen",
-            animationSpeed: 300
-        }
-    }).reInit();
-
+    $.fensterFinder(this)
+        .setOptions({
+            href: 'remote.html',
+            options: {callbackOpen: "myOpen", animationSpeed: 300}
+        })
+        .reInit();
     return false;
 });
 </div>
