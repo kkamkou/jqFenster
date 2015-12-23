@@ -51,7 +51,8 @@ Owners (working in the opened popup)
 Anonymous (creates popup on the fly):
   var cbOpen = function (elem) {};
   var cbClose = function (elem) {};
-  var modal = $.fenster({href: '/my/page/', callbackOpen: cbOpen, callbackClose: cbClose}).open(); // or $.fenster('#myPopup').open();
+  var modal = $.fenster({href: '/my/page/', callbackOpen: cbOpen, callbackClose: cbClose});
+  modal.open(); // or $.fenster('#myPopup').open();
   modal.close(); // or modal.close().destroy(); to remove a placeholder from the DOM
 
 Global events:
