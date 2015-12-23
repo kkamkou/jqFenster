@@ -40,7 +40,6 @@ asyncTest('In-DOM instance', 8, function() {
       $api = $.fensterFinder('#simplelink');
 
     equal($target.length, 1, 'DOM has the "jqFensterHolder" element');
-    debugger;
     equal($target.data('jqFensterAncestor').length, 1, 'Holder has the "jqFensterAncestor" data');
     equal($api.isDestroyable(), false, '"$api.isDestroyable()" is false for non-dynamic modals');
     equal($api.destroy(), false, '"$api.destroy()" is false');
@@ -78,6 +77,21 @@ asyncTest('Dynamic instance', 10, function() {
       equal(hiddenLinksCount(), 0, 'Empty link is removed from the body');
       equal($fenster.destroy(), false, '"$fenster.destroy()" is false for the destroyed object');
       start();
+    }, animationDelay);
+  }, animationDelay);
+});
+
+asyncTest('Issue #12', 1, function() {
+  var modal = $.fenster('#targetSecond').open();
+  setTimeout(function () {
+    $('a.jqFensterClose:visible').click();
+    setTimeout(function () {
+      modal.open();
+      equal(modal.element.data('jqFensterHolder').length, 1);
+      setTimeout(function () {
+        modal.destroy();
+        start();
+      }, animationDelay);
     }, animationDelay);
   }, animationDelay);
 });
