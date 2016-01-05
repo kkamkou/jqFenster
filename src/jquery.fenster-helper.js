@@ -281,7 +281,7 @@
           return that;
         };
 
-      // jqEbony is used, just hidding the window
+      // jqEbony is used, just hiding the window
       if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
         $holder.hide();
         return cb();

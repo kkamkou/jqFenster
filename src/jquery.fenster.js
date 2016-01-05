@@ -64,7 +64,6 @@
       if (!this.getHolder()) {
         return this;
       }
-
       this.options.callbackClose.call(null, this.getHolder());
       this.getHolder().trigger('jqFensterClose');
       this.setHolder(null);
@@ -93,7 +92,7 @@
 
       var cbToExecute = function () {
         this.options.callbackOpen.call(null, this.getHolder());
-        if ($.type(cb) === 'function') {
+        if ($.isFunction(cb)) {
           cb.call(this);
         }
         return this;
@@ -118,11 +117,12 @@
     },
 
     reInit: function () {
-      this.close();
-
       var that = this;
+
+      this.close();
       setTimeout(function () {
-        if (that.element.data('modalLocked')) {
+        // for in-dom elements
+        if (!that.element || that.element.data('jqFensterLocked')) {
           return that.reInit();
         }
         that._init().open();
@@ -172,11 +172,14 @@
     return new JqFensterApi(this, options);
   };
 
-  // helps to find/creatre the jqFenster object
+  // helps to find/create the jqFenster object
   $.extend({
     // $.fensterFinder(selector|this)
     fensterFinder: function (target) {
-      var $target = $(target), $elem;
+      var $elem, $target;
+
+      // target is a selector or an api instance
+      $target = (target instanceof JqFensterApi) ? target.element : $(target);
 
       // target is link already
       if ($target.data('jqFensterHolder')) {
