@@ -159,5 +159,22 @@ QUnit.module("DOM", function (hooks) {
         done();
       }, animationDelay);
     });
+
+    QUnit.test('Issue #16', 7, function (assert) {
+      var modal, done = assert.async(), $link = $('#simplelink').click();
+      setTimeout(function () {
+        modal = $.fensterFinder($link);
+        assert.ok(modal.element.data('selector'), '"selector" exists in the data');
+        assert.equal(countHoldersVisible(), 1, 'The first modal is visible');
+        modal.setOptions({href: 'remote.html'}).reInit();
+        setTimeout(function () {
+          assert.notOk(modal.element.data('selector'), '"selector" does not exist in the data');
+          assert.ok($('.jqFensterModalContent:visible').text().indexOf("I'm remote one!") !== -1, 'The second modal is visible');
+          assert.notOk(modal.destroy(), 'destroy() returns false');
+          modal.close();
+          done();
+        }, animationDelay);
+      }, animationDelay);
+    });
   });
 });

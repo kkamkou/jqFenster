@@ -150,15 +150,13 @@
     },
 
     _init: function () {
-      if (this.options.href !== null) {
-        this.element.data('href', this.options.href);
+      // it is not possible to use href and selector in the same time
+      if (this.options.href && this.options.selector) {
+        this.options.selector = null;
       }
-      if (this.options.selector !== null) {
-        this.element.data('selector', this.options.selector);
-      }
-      if (this.options.options) {
-        this.element.data('options', this.options.options);
-      }
+      this.element.data('href', this.options.href || null);
+      this.element.data('selector', this.options.selector || null);
+      this.element.data('options', this.options.options || null);
       return this;
     }
   };

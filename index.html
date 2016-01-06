@@ -147,18 +147,23 @@ $.fenster({'selector': '#target'}).open();</div>
                 <tr>
                     <td>
                         2. <button id="api2">reInit()</button>
-<div class="code">// this file
+<div class="code">// #1 example with an in-dom element
+var $link = $('#simplelink'), modal;
+modal = $.fensterFinder($link.click())
+    // it is possible to use {selector: '#targetSecond'} INSTEAD OF href
+    .setOptions({href: 'remote.html', options: {animationSpeed: 300}})
+    .reInit();
+// later
+modal.destroy();
+
+// #2 example with a remote file
+// this file
 $.fenster({href: 'remote-reinit.html'}).open();
 
 // remote-reinit.html
 $('#reinitAnother').bind('click', function () {
-    $.fensterFinder(this)
-        .setOptions({
-            href: 'remote.html',
-            options: {callbackOpen: "myOpen", animationSpeed: 300}
-        })
-        .reInit();
-
+    // you can use the current element (this)
+    $.fensterFinder(this).setOptions(...).reInit();
     return false;
 });
 </div>
