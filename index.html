@@ -255,11 +255,19 @@ modal.destroy() // or modal.close().destroy();</div>
                     <td>
                         2. <button id="api2">reInit()</button>
 <div class="code">// #1 example with an in-dom element
-var $link = $('#simplelink'), modal;
+var modal,
+    $link = $('#simplelink'),
+    metadata = {
+        href: 'remote.html',
+        callbackOpen: "myOpen",
+        options: {animationSpeed: 300}
+    };
+
 modal = $.fensterFinder($link.click())
     // it is possible to use {selector: '#targetSecond'} INSTEAD OF href
-    .setOptions({href: 'remote.html', options: {animationSpeed: 300}})
+    .setOptions(metadata)
     .reInit();
+
 // later
 modal.destroy();
 

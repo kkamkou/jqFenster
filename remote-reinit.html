@@ -9,14 +9,8 @@
 <script type="text/javascript">
     $('#reinitAnother').bind('click', function () {
         $.fensterFinder(this)
-            .setOptions({
-                'href': 'remote.html',
-                'options': {
-                    callbackOpen: "myOpen",
-                    animationSpeed: 300
-                }
-            }).reInit();
-
+            .setOptions({href: 'remote.html', options: {animationSpeed: 300}})
+            .reInit();
         return false;
     });
 </script>
