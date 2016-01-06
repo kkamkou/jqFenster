@@ -74,7 +74,7 @@
       return !!(this.element && this.element.data('jqFensterDestroyable'));
     },
 
-    // DOM cleanup (removes <a> at the end of body)
+    // DOM cleanup (removes <a> from the end of the body)
     destroy: function () {
       if (!this.isDestroyable()) {
         return false;
@@ -108,7 +108,7 @@
       setTimeout(function () {
         this.setHolder(
           this.element.data('jqFensterHolder')
-            .on('jqFensterCallbackClose', this.close.bind(this))
+            .one('jqFensterClose', this.close.bind(this))
         );
         cbToExecute.call(this);
       }.bind(this), this.options.delayOpen);
@@ -121,8 +121,7 @@
 
       this.close();
       setTimeout(function () {
-        // for in-dom elements
-        if (!that.element || that.element.data('jqFensterLocked')) {
+        if (that.element.data('jqFensterLocked')) { // for in-dom elements
           return that.reInit();
         }
         that._init().open();

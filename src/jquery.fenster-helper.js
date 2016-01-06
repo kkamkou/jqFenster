@@ -212,7 +212,6 @@
         // if the current plugin uses jqEbony, we should notice it
         if ($.type(that.getOverlay()) === 'object') {
           that.getOverlay().close();
-          that.setOverlay(null);
           return that;
         }
         return that.close();
@@ -240,7 +239,7 @@
 
       // overlay enabled
       this.setOverlay(
-        $($holder).jqEbony({
+        $holder.jqEbony({
           clickCloseArea: $injected,
           animationSpeed: this.options.animationSpeed,
           callbackClose: function () {
@@ -253,7 +252,6 @@
           }
         })
       );
-
       this.getOverlay().open();
 
       return false;
