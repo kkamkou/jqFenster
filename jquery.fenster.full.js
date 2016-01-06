@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.2.10 (2015-12-23)
+ * Version: 1.3.0 (2016-01-06)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -75,7 +75,6 @@
       if (!this.getHolder()) {
         return this;
       }
-
       this.options.callbackClose.call(null, this.getHolder());
       this.getHolder().trigger('jqFensterClose');
       this.setHolder(null);
@@ -86,7 +85,7 @@
       return !!(this.element && this.element.data('jqFensterDestroyable'));
     },
 
-    // DOM cleanup (removes <a> at the end of body)
+    // DOM cleanup (removes <a> from the end of the body)
     destroy: function () {
       if (!this.isDestroyable()) {
         return false;
@@ -104,7 +103,7 @@
 
       var cbToExecute = function () {
         this.options.callbackOpen.call(null, this.getHolder());
-        if ($.type(cb) === 'function') {
+        if ($.isFunction(cb)) {
           cb.call(this);
         }
         return this;
@@ -120,7 +119,7 @@
       setTimeout(function () {
         this.setHolder(
           this.element.data('jqFensterHolder')
-            .on('jqFensterCallbackClose', this.close.bind(this))
+            .one('jqFensterClose', this.close.bind(this))
         );
         cbToExecute.call(this);
       }.bind(this), this.options.delayOpen);
@@ -129,11 +128,11 @@
     },
 
     reInit: function () {
-      this.close();
-
       var that = this;
+
+      this.close();
       setTimeout(function () {
-        if (that.element.data('modalLocked')) {
+        if (that.element.data('jqFensterLocked')) { // for in-dom elements
           return that.reInit();
         }
         that._init().open();
@@ -162,15 +161,13 @@
     },
 
     _init: function () {
-      if (this.options.href !== null) {
-        this.element.data('href', this.options.href);
+      // it is not possible to use href and selector in the same time
+      if (this.options.href && this.options.selector) {
+        this.options.selector = null;
       }
-      if (this.options.selector !== null) {
-        this.element.data('selector', this.options.selector);
-      }
-      if (this.options.options) {
-        this.element.data('options', this.options.options);
-      }
+      this.element.data('href', this.options.href || null);
+      this.element.data('selector', this.options.selector || null);
+      this.element.data('options', this.options.options || null);
       return this;
     }
   };
@@ -183,11 +180,14 @@
     return new JqFensterApi(this, options);
   };
 
-  // helps to find/creatre the jqFenster object
+  // helps to find/create the jqFenster object
   $.extend({
     // $.fensterFinder(selector|this)
     fensterFinder: function (target) {
-      var $target = $(target), $elem;
+      var $elem, $target;
+
+      // target is a selector or an api instance
+      $target = (target instanceof JqFensterApi) ? target.element : $(target);
 
       // target is link already
       if ($target.data('jqFensterHolder')) {
@@ -438,7 +438,6 @@
         // if the current plugin uses jqEbony, we should notice it
         if ($.type(that.getOverlay()) === 'object') {
           that.getOverlay().close();
-          that.setOverlay(null);
           return that;
         }
         return that.close();
@@ -466,7 +465,7 @@
 
       // overlay enabled
       this.setOverlay(
-        $($holder).jqEbony({
+        $holder.jqEbony({
           clickCloseArea: $injected,
           animationSpeed: this.options.animationSpeed,
           callbackClose: function () {
@@ -479,16 +478,18 @@
           }
         })
       );
-
       this.getOverlay().open();
-
       return false;
     },
     close: function () {
       var $element = this.getElement(),
         $holder = this.getHolder(),
-        that = this,
-        cb = function () {
+        that = this;
+
+      // using an animation to close the window
+      $holder.fadeOut(
+        this.getOverlay() ? 0 : this.options.animationSpeed,
+        function () {
           // calling default callback
           $holder.trigger('jqFensterCallbackClose');
 
@@ -505,16 +506,8 @@
             .removeData('jqFensterHolder');
 
           return that;
-        };
-
-      // jqEbony is used, just hidding the window
-      if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
-        $holder.hide();
-        return cb();
-      }
-
-      // using an animation to close the window
-      $holder.fadeOut(this.getOverlay() ? 0 : this.options.animationSpeed, cb);
+        }
+      );
 
       return this;
     },
