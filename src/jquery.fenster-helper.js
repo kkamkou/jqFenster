@@ -212,7 +212,6 @@
         // if the current plugin uses jqEbony, we should notice it
         if ($.type(that.getOverlay()) === 'object') {
           that.getOverlay().close();
-          that.setOverlay(null);
           return that;
         }
         return that.close();
@@ -240,7 +239,7 @@
 
       // overlay enabled
       this.setOverlay(
-        $($holder).jqEbony({
+        $holder.jqEbony({
           clickCloseArea: $injected,
           animationSpeed: this.options.animationSpeed,
           callbackClose: function () {
@@ -253,16 +252,18 @@
           }
         })
       );
-
       this.getOverlay().open();
-
       return false;
     },
     close: function () {
       var $element = this.getElement(),
         $holder = this.getHolder(),
-        that = this,
-        cb = function () {
+        that = this;
+
+      // using an animation to close the window
+      $holder.fadeOut(
+        this.getOverlay() ? 0 : this.options.animationSpeed,
+        function () {
           // calling default callback
           $holder.trigger('jqFensterCallbackClose');
 
@@ -279,16 +280,8 @@
             .removeData('jqFensterHolder');
 
           return that;
-        };
-
-      // jqEbony is used, just hidding the window
-      if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
-        $holder.hide();
-        return cb();
-      }
-
-      // using an animation to close the window
-      $holder.fadeOut(this.getOverlay() ? 0 : this.options.animationSpeed, cb);
+        }
+      );
 
       return this;
     },

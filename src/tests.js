@@ -1,24 +1,32 @@
-QUnit.config.reorder = false;
+QUnit.config.autostart = false;
 QUnit.config.altertitle = false;
+QUnit.config.reorder = false;
+QUnit.config.scrolltop = false;
 
 var animationDelay = 300;
-
-function hiddenLinksCount() {
+function countHidenLinks() {
   return $('body a.jqFenster:hidden:not([href])').length;
 }
+function countHolders() {
+  return $('.jqFensterHolder').length;
+}
+function countHoldersVisible() {
+  return $('.jqFensterHolder:visible').length;
+}
 
-test('DOM Init', 3, function() {
-  equal($('.jqFensterHolder').length, 0, 'DOM does not have jqFensterHolder');
-  equal($('.jqEbony').length, 0, 'DOM does not have jqEbony');
-  equal(hiddenLinksCount(), 0, 'DOM does not have hidden links');
+QUnit.module("Environment check");
+QUnit.test('DOM Init', 3, function (assert) {
+  assert.equal($('.jqEbony').length, 0, 'DOM does not have jqEbony');
+  assert.equal(countHolders(), 0, 'DOM does not have jqFensterHolder');
+  assert.equal(countHidenLinks(), 0, 'DOM does not have hidden links');
 });
 
-test('jQuery functions', 2, function() {
-  deepEqual($.type($.fenster), 'function', 'jQuery has the "$.fenster()" function');
-  deepEqual($.type($.fensterFinder), 'function', 'jQuery has the "$.fensterFinder()" function');
+QUnit.test('jQuery functions', 2, function (assert) {
+  assert.equal($.type($.fenster), 'function', 'jQuery has the "$.fenster()" function');
+  assert.equal($.type($.fensterFinder), 'function', 'jQuery has the "$.fensterFinder()" function');
 });
 
-test('API functionality', 9, function() {
+QUnit.test('API functionality', 9, function (assert) {
   var $fenster = $('#targetSecond').fenster(),
     fncList = [
       'open', 'close', 'destroy', 'reInit', 'getAncestor', 'getHolder', 'setHolder', 'setOptions',
@@ -26,72 +34,130 @@ test('API functionality', 9, function() {
     ];
 
   fncList.forEach(function (name) {
-    deepEqual($.type($fenster[name]), 'function', '"$fenster.' + name + '()" exists');
+    assert.ok($.isFunction($fenster[name]), '"$fenster.' + name + '()" exists');
   });
 
   $fenster.destroy();
 });
 
-asyncTest('In-DOM instance', 8, function() {
-  $('#simplelink').click();
-
-  setTimeout(function () {
-    var $target = $('.jqFensterHolder'),
-      $api = $.fensterFinder('#simplelink');
-
-    equal($target.length, 1, 'DOM has the "jqFensterHolder" element');
-    equal($target.data('jqFensterAncestor').length, 1, 'Holder has the "jqFensterAncestor" data');
-    equal($api.isDestroyable(), false, '"$api.isDestroyable()" is false for non-dynamic modals');
-    equal($api.destroy(), false, '"$api.destroy()" is false');
-
-    $api.close();
-
+QUnit.module("DOM", function (hooks) {
+  hooks.afterEach(function (assert) {
+    var done = assert.async();
     setTimeout(function () {
-      var $elem = $('#targetSecond');
-
-      equal($('.jqFensterHolder').length, 0, 'DOM does not have the "jqFensterHolder" element');
-      deepEqual($.type($elem.data('jqFensterLocked')), 'undefined', 'No jqFensterLocked in data');
-      deepEqual($.type($elem.data('jqFensterHolder')), 'undefined', 'No jqFensterHolder in data');
-      equal(hiddenLinksCount(), 0, 'No hidden links have been created');
-
-      start();
+      assert.equal(countHidenLinks(), 0, 'No hidden links found');
+      assert.equal(countHolders(), 0, 'DOM does not have a "jqFensterHolder" element');
+      done();
     }, animationDelay);
-  }, animationDelay);
-});
+  });
 
-asyncTest('Dynamic instance', 10, function() {
-  var $fenster = $.fenster({href: 'remote.html'});
+  QUnit.module('Manipulations', function () {
+    QUnit.test('In DOM instance', 9, function (assert) {
+      var done = assert.async();
 
-  deepEqual($fenster, $fenster.open(), '"$fenster.open()" returns an API instance');
+      $('#simplelink').click();
 
-  setTimeout(function () {
-    equal(hiddenLinksCount(), 1, 'Empty link added to the body');
-    equal($fenster.element.data('jqFensterHolder').hasClass('jqFenster'), false, 'Holder has no jqFenster class');
-    deepEqual($fenster, $fenster.close(), '"$fenster.close()" returns an API instance');
-    equal($fenster.isDestroyable(), true, '"$fenster.isDestroyable()" is true for dynamic modals');
-    deepEqual($fenster.element.get(0), $('body a.jqFenster:last:hidden').get(0), 'Elements are identical');
-    equal($fenster.destroy(), true, '"$fenster.destroy()" is true for dynamic modals');
-
-    setTimeout(function () {
-      equal($('.jqFensterHolder').length, 0, 'DOM does not have the "jqFensterHolder" element');
-      equal(hiddenLinksCount(), 0, 'Empty link is removed from the body');
-      equal($fenster.destroy(), false, '"$fenster.destroy()" is false for the destroyed object');
-      start();
-    }, animationDelay);
-  }, animationDelay);
-});
-
-asyncTest('Issue #12', 1, function() {
-  var modal = $.fenster('#targetSecond').open();
-  setTimeout(function () {
-    $('a.jqFensterClose:visible').click();
-    setTimeout(function () {
-      modal.open();
-      equal(modal.element.data('jqFensterHolder').length, 1);
       setTimeout(function () {
-        modal.destroy();
-        start();
+        var $target = $('.jqFensterHolder'),
+            $api = $.fensterFinder('#simplelink');
+
+        assert.equal($target.length, 1, 'DOM has the "jqFensterHolder" element');
+        assert.equal($target.data('jqFensterAncestor').length, 1, 'Holder has the "jqFensterAncestor" data');
+        assert.equal($api.isDestroyable(), false, '"$api.isDestroyable()" is false for non-dynamic modals');
+        assert.equal($api.destroy(), false, '"$api.destroy()" is false');
+
+        $api.close();
+
+        setTimeout(function () {
+          var $elem = $('#targetSecond');
+
+          assert.equal(countHolders(), 0, 'DOM does not have the "jqFensterHolder" element');
+          assert.deepEqual($.type($elem.data('jqFensterLocked')), 'undefined', 'No jqFensterLocked in data');
+          assert.deepEqual($.type($elem.data('jqFensterHolder')), 'undefined', 'No jqFensterHolder in data');
+
+          done();
+        }, animationDelay);
       }, animationDelay);
-    }, animationDelay);
-  }, animationDelay);
+    });
+
+    QUnit.test('Dynamic instance', 11, function (assert) {
+      var done = assert.async(),
+        $fenster = $.fenster({href: 'remote.html'});
+
+      assert.deepEqual($fenster, $fenster.open(), '"$fenster.open()" returns an API instance');
+
+      setTimeout(function () {
+        assert.equal(countHidenLinks(), 1, 'Empty link added to the body');
+        assert.equal($fenster.element.data('jqFensterHolder').hasClass('jqFenster'), false, 'Holder has no jqFenster class');
+        assert.deepEqual($fenster, $fenster.close(), '"$fenster.close()" returns an API instance');
+        assert.equal($fenster.isDestroyable(), true, '"$fenster.isDestroyable()" is true for dynamic modals');
+        assert.deepEqual($fenster.element.get(0), $('body a.jqFenster:last:hidden').get(0), 'Elements are identical');
+        assert.equal($fenster.destroy(), true, '"$fenster.destroy()" is true for dynamic modals');
+
+        setTimeout(function () {
+          assert.equal($('.jqFensterHolder').length, 0, 'DOM does not have the "jqFensterHolder" element');
+          assert.equal($fenster.destroy(), false, '"$fenster.destroy()" is false for the destroyed object');
+          done();
+        }, animationDelay);
+      }, animationDelay);
+    });
+  });
+
+  QUnit.module("Ticket related", function () {
+    QUnit.test('Issue #12', 4, function (assert) {
+      var done = assert.async(),
+        modal = $.fenster('#targetSecond');
+
+      setTimeout(function () {
+        $('a.jqFensterClose:visible').click();
+        setTimeout(function () {
+          modal.open();
+          assert.equal(modal.element.data('jqFensterHolder').length, 1, 'jqFensterHolder is in the data');
+          assert.equal(countHoldersVisible(), 1, 'The modal is visible');
+          setTimeout(function () {
+            modal.destroy();
+            done();
+          }, animationDelay);
+        }, animationDelay);
+      }, animationDelay);
+    });
+
+    QUnit.test('Issue #13', 8, function (assert) {
+      var done = assert.async(),
+          modal = $.fenster({href: 'remote-reinit.html'}).open();
+
+      setTimeout(function () {
+        modal.getHolder().find('#reinitAnother').trigger('click');
+        setTimeout(function () {
+          var modalNew = $.fensterFinder(modal)
+              .setOptions({href: 'remote.html', options: {animationSpeed: 300}})
+              .reInit();
+
+          assert.notOk(modal === modalNew, 'Objects are not the same');
+          assert.deepEqual(modalNew.element, modal.element, 'The same element is used');
+          assert.ok(modal.isDestroyable(), 'The first object is destroyable');
+          assert.ok(modalNew.isDestroyable(), 'The second object is destroyable');
+
+          setTimeout(function () {
+            assert.ok($('.jqFensterModalContent:visible').text().indexOf("I'm remote one!") !== -1, 'The modal is visible');
+            modalNew.destroy();
+            assert.notOk(modal.isDestroyable(), 'The first object is not destroyable anymore');
+            done();
+          }, animationDelay * 3);
+        }, animationDelay);
+      }, animationDelay);
+    });
+
+    QUnit.test('Issue #14', 3, function (assert) {
+      var done = assert.async(),
+        modal = $.fenster({href: 'remote.html', options: {noOverlay: true}}).open();
+
+      assert.equal(countHoldersVisible(), 1, 'Modal is visible');
+
+      setTimeout(function () {
+        $.fensterFinder(modal).getHolder().find('a.jqFensterClose').click();
+        modal.destroy();
+        done();
+      }, animationDelay);
+    });
+  });
 });

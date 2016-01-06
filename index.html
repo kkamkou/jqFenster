@@ -148,7 +148,7 @@ $.fenster({'selector': '#target'}).open();</div>
                     <td>
                         2. <button id="api2">reInit()</button>
 <div class="code">// this file
-$.fenster({'href': 'remote-reinit.html'}).open();
+$.fenster({href: 'remote-reinit.html'}).open();
 
 // remote-reinit.html
 $('#reinitAnother').bind('click', function () {
@@ -168,7 +168,12 @@ $('#reinitAnother').bind('click', function () {
 
             <hr/>
 
-            <h3>Tests (<a href="http://qunitjs.com/">QUnit</a>) <button id="runTests">Run</button></h3>
+            <h3>
+                Tests (<a href="http://qunitjs.com/">QUnit</a>)
+                <button onclick="QUnit.start();return false;">Run</button>
+            </h3>
+
+            <script type="text/javascript" src="src/tests.js"></script>
 
             <div id="qunit"></div>
             <div id="qunit-fixture"></div>
@@ -242,11 +247,6 @@ $('#reinitAnother').bind('click', function () {
 
                 $('#api2').bind('click', function () {
                     $.fenster({'href': 'remote-reinit.html'}).open();
-                    return false;
-                });
-
-                $('#runTests').bind('click', function () {
-                    $.getScript("src/tests.js");
                     return false;
                 });
             });
