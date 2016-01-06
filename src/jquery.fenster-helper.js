@@ -253,14 +253,17 @@
         })
       );
       this.getOverlay().open();
-
       return false;
     },
     close: function () {
       var $element = this.getElement(),
         $holder = this.getHolder(),
-        that = this,
-        cb = function () {
+        that = this;
+
+      // using an animation to close the window
+      $holder.fadeOut(
+        this.getOverlay() ? 0 : this.options.animationSpeed,
+        function () {
           // calling default callback
           $holder.trigger('jqFensterCallbackClose');
 
@@ -277,16 +280,8 @@
             .removeData('jqFensterHolder');
 
           return that;
-        };
-
-      // jqEbony is used, just hiding the window
-      if ($.isFunction($.fn.jqEbony) && !this.getOverlay()) {
-        $holder.hide();
-        return cb();
-      }
-
-      // using an animation to close the window
-      $holder.fadeOut(this.getOverlay() ? 0 : this.options.animationSpeed, cb);
+        }
+      );
 
       return this;
     },

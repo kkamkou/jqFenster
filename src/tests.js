@@ -105,7 +105,7 @@ QUnit.module("DOM", function (hooks) {
   QUnit.module("Ticket related", function () {
     QUnit.test('Issue #12', 4, function (assert) {
       var done = assert.async(),
-          modal = $.fenster('#targetSecond');
+        modal = $.fenster('#targetSecond');
 
       setTimeout(function () {
         $('a.jqFensterClose:visible').click();
@@ -144,6 +144,19 @@ QUnit.module("DOM", function (hooks) {
             done();
           }, animationDelay * 3);
         }, animationDelay);
+      }, animationDelay);
+    });
+
+    QUnit.test('Issue #14', 3, function (assert) {
+      var done = assert.async(),
+        modal = $.fenster({href: 'remote.html', options: {noOverlay: true}}).open();
+
+      assert.equal(countHoldersVisible(), 1, 'Modal is visible');
+
+      setTimeout(function () {
+        $.fensterFinder(modal).getHolder().find('a.jqFensterClose').click();
+        modal.destroy();
+        done();
       }, animationDelay);
     });
   });
