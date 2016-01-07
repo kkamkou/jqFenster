@@ -1,6 +1,6 @@
 /**
  * jqFenster - Lightweight Modal Framework
- * Version: 1.3.0 (2016-01-06)
+ * Version: 1.3.1 (2016-01-07)
  * https://github.com/kkamkou/jqFenster
  */
 (function($) {
@@ -174,20 +174,33 @@
 
   // jQuery plugin
   $.fn.fenster = function (options) {
+    // prevents incorrect selectors
+    if (!this.length) {
+      return $.error('Element "%s" isn\'t found'.replace('%s', this.selector));
+    }
+
+    // prevents incorrect elements
     if (!this.hasClass('jqFenster')) {
       return $.fenster(this.selector);
     }
-    return new JqFensterApi(this, options);
+
+    if (!this.data('jqFensterDestroyable')) {
+      return new JqFensterApi(this, options);
+    }
+
+    // singleton pattern (bad idea, but speed-up the framework)
+    var elem = this.get(0);
+    if (!$.data(elem, 'JqFensterApi')) {
+      $.data(elem, 'JqFensterApi', new JqFensterApi(this, options))
+    }
+    return $.data(elem, 'JqFensterApi');
   };
 
   // helps to find/create the jqFenster object
   $.extend({
     // $.fensterFinder(selector|this)
     fensterFinder: function (target) {
-      var $elem, $target;
-
-      // target is a selector or an api instance
-      $target = (target instanceof JqFensterApi) ? target.element : $(target);
+      var $elem, $target = $(target);
 
       // target is link already
       if ($target.data('jqFensterHolder')) {
