@@ -153,6 +153,18 @@
                 </tr>
             </table>
 
+            <hr/>
+
+            <h3>
+                Tests (<a href="http://qunitjs.com/">QUnit</a>)
+                <button onclick="QUnit.start();return false;">Run (reload page first)</button>
+            </h3>
+
+            <script type="text/javascript" src="jqFenster/src/tests.js"></script>
+
+            <div id="qunit"></div>
+            <div id="qunit-fixture"></div>
+
             <h3>DOM Helpers (<a href="https://github.com/kkamkou/jqFenster/blob/master/src/jquery.fenster-helper.js" style="color:red">jquery.fenster-helper.js</a>)</h3>
 
             <table>
@@ -285,23 +297,9 @@ $('#reinitAnother').bind('click', function () {
                     </td>
                 </tr>
             </table>
-
-            <hr/>
-
-            <h3>
-                Tests (<a href="http://qunitjs.com/">QUnit</a>)
-                <button onclick="QUnit.start();return false;">Run (reload page first)</button>
-            </h3>
-
-            <script type="text/javascript" src="jqFenster/src/tests.js"></script>
-
-            <div id="qunit"></div>
-            <div id="qunit-fixture"></div>
-
-            <br />
         </div>
 
-        <!-- Inline elements-->
+        <!-- Inline elements -->
         <div id="target" class="jqFensterModal">
             <div class="jqFensterModalContent">
                 <h4>Hello, I'm the #target</h4>
@@ -309,6 +307,11 @@ $('#reinitAnother').bind('click', function () {
                 <a href="#" class="jqFensterClose">Close me please.</a>
             </div>
             <a href="#" class="jqFensterClose jqFensterModalClose">&times;</a>
+        </div>
+
+        <div id="targetHidden" class="jqFensterModal">
+            <div class="jqFensterModalContent">targetHidden</div>
+            <a href="#" class="jqFensterClose jqFensterModalClose">×</a>
         </div>
 
         <div id="targetSecond" class="jqFensterModal">
