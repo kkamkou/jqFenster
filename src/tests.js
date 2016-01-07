@@ -26,7 +26,7 @@ QUnit.test('jQuery functions', 2, function (assert) {
   assert.equal($.type($.fensterFinder), 'function', 'jQuery has the "$.fensterFinder()" function');
 });
 
-QUnit.test('API functionality', 9, function (assert) {
+QUnit.test('API functionality', 10, function (assert) {
   var $fenster = $('#targetSecond').fenster(),
     fncList = [
       'open', 'close', 'destroy', 'reInit', 'getAncestor', 'getHolder', 'setHolder', 'setOptions',
@@ -38,6 +38,8 @@ QUnit.test('API functionality', 9, function (assert) {
   });
 
   $fenster.destroy();
+
+  assert.throws($('unknown').fenster, '"fenster()" throws in case of invalid selector');
 });
 
 QUnit.module("DOM", function (hooks) {
@@ -51,6 +53,25 @@ QUnit.module("DOM", function (hooks) {
   });
 
   QUnit.module('Manipulations', function () {
+    QUnit.test('$.fensterFinder() functionality', 7, function (assert) {
+      var done = assert.async(),
+        modal = $.fenster('#targetHidden').open();
+      setTimeout(function () {
+        var asserts = [
+          "'#targetHidden'",
+          "$('#targetHidden')",
+          "$('div.jqFensterHolder')",
+          "$('div.jqFensterModalContent')"
+        ];
+        $(asserts).each(function (idx, e) {
+          assert.deepEqual($.fensterFinder(eval(e)), modal, '$.fensterFinder(' + e + ')');
+        });
+        assert.notEqual($.fensterFinder('#target'), modal, '"#target" is not equal');
+        modal.destroy();
+        done();
+      }, animationDelay);
+    });
+
     QUnit.test('In DOM instance', 9, function (assert) {
       var done = assert.async();
 
@@ -128,11 +149,11 @@ QUnit.module("DOM", function (hooks) {
       setTimeout(function () {
         modal.getHolder().find('#reinitAnother').trigger('click');
         setTimeout(function () {
-          var modalNew = $.fensterFinder(modal)
+          var modalNew = modal
               .setOptions({href: 'remote.html', options: {animationSpeed: 300}})
               .reInit();
 
-          assert.notOk(modal === modalNew, 'Objects are not the same');
+          assert.deepEqual(modal, modalNew, 'Objects are the same');
           assert.deepEqual(modalNew.element, modal.element, 'The same element is used');
           assert.ok(modal.isDestroyable(), 'The first object is destroyable');
           assert.ok(modalNew.isDestroyable(), 'The second object is destroyable');
@@ -154,13 +175,13 @@ QUnit.module("DOM", function (hooks) {
       assert.equal(countHoldersVisible(), 1, 'Modal is visible');
 
       setTimeout(function () {
-        $.fensterFinder(modal).getHolder().find('a.jqFensterClose').click();
+        modal.getHolder().find('a.jqFensterClose').click();
         modal.destroy();
         done();
       }, animationDelay);
     });
 
-    QUnit.test('Issue #16', 7, function (assert) {
+    QUnit.test('Issue #16', 6, function (assert) {
       var modal, done = assert.async(), $link = $('#simplelink').click();
       setTimeout(function () {
         modal = $.fensterFinder($link);
@@ -168,11 +189,30 @@ QUnit.module("DOM", function (hooks) {
         assert.equal(countHoldersVisible(), 1, 'The first modal is visible');
         modal.setOptions({href: 'remote.html'}).reInit();
         setTimeout(function () {
-          assert.notOk(modal.element.data('selector'), '"selector" does not exist in the data');
           assert.ok($('.jqFensterModalContent:visible').text().indexOf("I'm remote one!") !== -1, 'The second modal is visible');
           assert.notOk(modal.destroy(), 'destroy() returns false');
           modal.close();
           done();
+        }, animationDelay);
+      }, animationDelay);
+    });
+
+    QUnit.test('Issue #17', 4, function (assert) {
+      var modalOne = $.fenster('#targetHidden').open(),
+        done = assert.async();
+
+      setTimeout(function () {
+        $.fensterFinder(modalOne.getHolder()).close();
+
+        setTimeout(function () {
+          modalOne.destroy();
+          modalTwo = $.fenster('#targetHidden').open();
+          assert.notEqual(modalOne, modalTwo, 'Objects are not the same');
+          setTimeout(function () {
+            assert.equal($('.jqFensterModalContent:visible').text(), 'targetHidden', 'The second modal is visible');
+            modalTwo.destroy();
+            done();
+          }, animationDelay);
         }, animationDelay);
       }, animationDelay);
     });

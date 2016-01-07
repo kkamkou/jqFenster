@@ -34,7 +34,7 @@ var files = {
 };
 
 function getComment () {
-  var version = '1.3.0',
+  var version = '1.3.1',
     date = new Date(),
     buildDate = date.getFullYear() + '-' +
       (date.getMonth() >= 9 ? '' : '0') + (date.getMonth() + 1) + '-' +
